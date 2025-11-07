@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.oop.naingue.demo5.controller.loginController"
+           prefHeight="600.0"
+           prefWidth="500.0"
+           style="-fx-background-color: #f5f5f5;">
+
+    <VBox fx:id="loginView"
+          alignment="CENTER"
+          spacing="25"
+          style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <VBox alignment="CENTER" spacing="10">
+            <Label text="SchedMoTo"
+                   style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1976d2;"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="Welcome Back!"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+            <Label text="Login to your account"
+                   style="-fx-font-size: 14px; -fx-text-fill: #888;"/>
+        </VBox>
+
+        <VBox spacing="15" style="-fx-padding: 10;">
+            <VBox spacing="5">
+                <Label text="Username" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <TextField fx:id="txtLoginUsername"
+                           promptText="Enter your username"
+                           style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Password"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <PasswordField fx:id="txtLoginPassword"
+                               promptText="Enter your password"
+                               style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <Label fx:id="lblLoginError"
+                   text=""
+                   visible="false"
+                   wrapText="true"
+                   style="-fx-text-fill: #d32f2f; -fx-font-size: 12px;"/>
+
+            <Button fx:id="btnLogin"
+                    text="Login"
+                    onAction="#handleLoginSubmit"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 5; -fx-cursor: hand;">
+                <font>
+                    <Font name="System Bold" size="16"/>
+                </font>
+            </Button>
+
+            <HBox alignment="CENTER" spacing="5">
+                <Label text="Don't have an account?"
+                       style="-fx-font-size: 13px; -fx-text-fill: #666;"/>
+                <Hyperlink fx:id="linkSignUp"
+                           text="Register"
+                           onAction="#handleShowSignUp"
+                           style="-fx-font-size: 13px; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+
+        <HBox alignment="CENTER" spacing="10">
+            <Separator prefWidth="80" style="-fx-background-color: #ddd;"/>
+            <Label text="OR" style="-fx-font-size: 12px; -fx-text-fill: #999;"/>
+            <Separator prefWidth="80" style="-fx-background-color: #ddd;"/>
+        </HBox>
+    </VBox>
+
+    <VBox fx:id="signUpView"
+          alignment="TOP_CENTER"
+          spacing="20"
+          managed="false"
+          visible="false"
+          style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <padding>
+            <Insets top="30" right="40" bottom="30" left="40"/>
+        </padding>
+
+
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="Create Account"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+            <Label text="Join SchedMoTo today!"
+                   style="-fx-font-size: 14px; -fx-text-fill: #888;"/>
+        </VBox>
+
+        <VBox spacing="12" style="-fx-padding: 10;">
+            <VBox spacing="5">
+                <Label text="Username *"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <TextField fx:id="txtSignUpUsername"
+                           promptText="Choose a username"
+                           style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Email Address *"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <TextField fx:id="txtSignUpEmail"
+                           promptText="your.email@example.com"
+                           style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Phone Number (Optional)"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <TextField fx:id="txtSignUpPhone"
+                           promptText="+1234567890"
+                           style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Password *"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <PasswordField fx:id="txtSignUpPassword"
+                               promptText="At least 6 characters"
+                               style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Confirm Password *"
+                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #555;"/>
+                <PasswordField fx:id="txtSignUpConfirmPassword"
+                               promptText="Re-enter your password"
+                               style="-fx-font-size: 14px; -fx-padding: 10; -fx-border-color: #ddd; -fx-border-radius: 5; -fx-background-radius: 5;"/>
+            </VBox>
+
+            <Label fx:id="lblSignUpError"
+                   text=""
+                   visible="false"
+                   wrapText="true"
+                   style="-fx-text-fill: #d32f2f; -fx-font-size: 12px;"/>
+
+            <CheckBox fx:id="chkTerms"
+                      text="I agree to the Terms and Conditions"
+                      style="-fx-font-size: 12px; -fx-text-fill: #666;"/>
+
+            <Button fx:id="btnSignUp"
+                    text="Create Account"
+                    onAction="#handleSignUpSubmit"
+                    maxWidth="Infinity"
+                    style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 5; -fx-cursor: hand;">
+                <font>
+                    <Font name="System Bold" size="16"/>
+                </font>
+            </Button>
+
+            <HBox alignment="CENTER" spacing="5">
+                <Label text="Already have an account?"
+                       style="-fx-font-size: 13px; -fx-text-fill: #666;"/>
+                <Hyperlink fx:id="linkLogin"
+                           text="Login"
+                           onAction="#handleShowLogin"
+                           style="-fx-font-size: 13px; -fx-text-fill: #1976d2; -fx-font-weight: bold;"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+</StackPane>
