@@ -49,7 +49,7 @@
             </VBox>
 
             <Label fx:id="lblLoginError"
-                   text=" "
+                   text=""
                    visible="false"
                    wrapText="true"
                    style="-fx-text-fill: #d32f2f; -fx-font-size: 12px;"/>
@@ -136,7 +136,7 @@
             </VBox>
 
             <Label fx:id="lblSignUpError"
-                   text=" "
+                   text=""
                    visible="false"
                    wrapText="true"
                    style="-fx-text-fill: #d32f2f; -fx-font-size: 12px;"/>
