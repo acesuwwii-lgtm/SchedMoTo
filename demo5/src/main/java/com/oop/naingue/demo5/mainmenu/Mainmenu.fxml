@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="oop.calihat.mainmenu.MainmenuController"
+            prefWidth="1200" prefHeight="700"
+            style="-fx-background-color: #f9fafc;">
+
+    <!-- Top Bar -->
+    <top>
+        <HBox style="-fx-background-color: #ffffff; -fx-padding: 15 30 15 30;"
+              spacing="10" alignment="CENTER">
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="SchedMoTo Dashboard"
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #007bff;" />
+
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Admin" onAction="#handleAdmin"
+                    style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 5; -fx-padding: 5 15;" />
+        </HBox>
+    </top>
+
+    <!-- Sidebar Buttons -->
+    <left>
+        <VBox spacing="20" alignment="TOP_CENTER"
+              style="-fx-padding: 30; -fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;">
+            <Button text="Dashboard" fx:id="btnDashboard" onAction="#handleDashboard"
+                    style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
+            <Button text="Rooms" fx:id="btnRooms" onAction="#handleRoom"
+                    style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
+            <Button text="Booking" fx:id="btnBooking" onAction="#handleBooking"
+                    style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
+            <Button text="Payment" fx:id="btnPayment" onAction="#handlePayment"
+                    style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #f9fafc;"/>
+    </center>
+</BorderPane>

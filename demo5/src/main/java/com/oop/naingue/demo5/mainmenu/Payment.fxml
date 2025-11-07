@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="oop.calihat.mainmenu.PaymentController"
+      spacing="15" style="-fx-padding:20; -fx-background-color:#f9fafc;">
+
+    <Label text="Payment Details"
+           style="-fx-font-size:22px; -fx-font-weight:bold; -fx-text-fill:#222;" />
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Amount:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="amountField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Payment Date:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="paymentDate" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Payment Method:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="methodBox" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Payment Status:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="statusBox" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Receipt:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="receiptField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Button text="Process Payment" onAction="#onProcessPayment"
+            style="-fx-background-color:#007bff; -fx-text-fill:white; -fx-background-radius:8;" />
+</VBox>
