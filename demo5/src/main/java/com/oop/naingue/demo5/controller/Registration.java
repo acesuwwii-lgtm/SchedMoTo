@@ -16,9 +16,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-/**
- * Registration Controller - Handles user registration
- */
+
 public class Registration implements Initializable {
 
     @FXML private TextField txtUsername;
@@ -166,7 +164,7 @@ public class Registration implements Initializable {
     @FXML
     private void handleShowLogin(javafx.event.ActionEvent event) {
         try {
-            // Close database connection before navigating
+
             if (databaseConnection != null) {
                 databaseConnection.close();
             }
