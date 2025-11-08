@@ -6,7 +6,7 @@ import javafx.application.Application;
 public class Launcher {
     public static void main(String[] args) {
         try {
-            System.out.println("🚀 Starting SchedMoTo Application with MongoDB...");
+            System.out.println("Starting SchedMoTo Application with MongoDB...");
             System.out.println("Java Version: " + System.getProperty("java.version"));
 
 

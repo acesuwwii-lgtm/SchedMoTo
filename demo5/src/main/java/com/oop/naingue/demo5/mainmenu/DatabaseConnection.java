@@ -1,4 +1,4 @@
-package oop.calihat.mainmenu;
+package com.oop.naingue.demo5.mainmenu;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;

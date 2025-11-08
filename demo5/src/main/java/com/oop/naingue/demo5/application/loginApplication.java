@@ -26,10 +26,9 @@ public class loginApplication extends Application {
         }
     }
 
-
     @Override
     public void init() throws Exception {
-        System.out.println("🔧 JavaFX Application initializing...");
+        System.out.println("JavaFX Application initializing...");
         super.init();
     }
 
