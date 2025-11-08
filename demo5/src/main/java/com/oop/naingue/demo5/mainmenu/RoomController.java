@@ -1,4 +1,4 @@
-package oop.calihat.mainmenu;
+package com.oop.naingue.demo5.mainmenu;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,19 +19,18 @@ public class RoomController {
     @FXML private TableColumn<Room, String> colStatus;
     @FXML private TableColumn<Room, Integer> colPrice;
 
-    private ObservableList<Room> roomList = FXCollections.observableArrayList();
-    private RoomDAO roomDAO = new RoomDAO(); // 👈 MongoDB handler
+    private final ObservableList<Room> roomList = FXCollections.observableArrayList();
+    private final RoomDAO roomDAO = new RoomDAO(); // ✅ Make sure RoomDAO is in same package
 
-    @FXML
     private void initialize() {
-        // ✅ Initialize columns
+        // ✅ Set up table columns
         colRoomId.setCellValueFactory(new PropertyValueFactory<>("roomId"));
         colRoomNo.setCellValueFactory(new PropertyValueFactory<>("roomNo"));
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        // ✅ Style the "Status" column (same as before)
+        // ✅ Style "Status" column — Java 8 compatible version
         colStatus.setCellFactory(column -> new TableCell<Room, String>() {
             @Override
             protected void updateItem(String status, boolean empty) {
@@ -41,29 +40,40 @@ public class RoomController {
                     setStyle("");
                 } else {
                     setText(status);
+
+                    // ✅ Use classic switch for Java 8/11 compatibility
                     switch (status) {
-                        case "Available" -> setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                        case "Booked" -> setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-                        case "Under Maintenance" -> setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
-                        case "Capacity Full" -> setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
-                        default -> setStyle("");
+                        case "Available":
+                            setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                            break;
+                        case "Booked":
+                            setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                            break;
+                        case "Under Maintenance":
+                            setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
+                            break;
+                        case "Capacity Full":
+                            setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
+                            break;
+                        default:
+                            setStyle("");
+                            break;
                     }
                 }
             }
         });
 
-        // ✅ Load room data from MongoDB
+        // ✅ Load room data
         loadRoomsFromDatabase();
     }
+
 
     private void loadRoomsFromDatabase() {
         roomList.clear();
         List<Room> roomsFromDB = roomDAO.getAllRooms();
 
-        if (roomsFromDB.isEmpty()) {
-            System.out.println("⚠️ No rooms found in MongoDB. You can insert sample data.");
-
-            // Optional: add default demo data only if DB is empty
+        if (roomsFromDB == null || roomsFromDB.isEmpty()) {
+            System.out.println("⚠️ No rooms found in MongoDB. Inserting demo data...");
             createDefaultRooms();
             roomsFromDB = roomDAO.getAllRooms();
         }
@@ -72,7 +82,7 @@ public class RoomController {
         roomTable.setItems(roomList);
     }
 
-    // 👇 Optional: create sample rooms if MongoDB is empty
+    // 👇 Create demo data if DB is empty
     private void createDefaultRooms() {
         String[] types = {"Single", "Double", "Suite"};
         int[] prices = {1500, 3000, 5000};
@@ -85,7 +95,7 @@ public class RoomController {
                     String roomId = "F" + floor + types[i].charAt(0) + (j + 1);
                     String roomNo = floor + String.format("%02d", roomCount++);
                     String type = types[i];
-                    String status = statuses[(int)(Math.random() * statuses.length)];
+                    String status = statuses[(int) (Math.random() * statuses.length)];
                     int price = prices[i];
 
                     roomDAO.addRoom(new Room(roomId, roomNo, type, status, price));
@@ -95,7 +105,7 @@ public class RoomController {
         System.out.println("✅ Sample rooms inserted into MongoDB!");
     }
 
-    // 🔁 Example: refresh table manually (optional button in FXML)
+    // 🔁 Optional: refresh data (e.g., via button in FXML)
     @FXML
     private void refreshRooms() {
         loadRoomsFromDatabase();

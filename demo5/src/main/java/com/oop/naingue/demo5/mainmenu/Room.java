@@ -1,4 +1,4 @@
-package oop.calihat.mainmenu;
+package com.oop.naingue.demo5.mainmenu;
 
 public class Room {
     private String roomId;
@@ -15,15 +15,43 @@ public class Room {
         this.price = price;
     }
 
-    public String getRoomId() { return roomId; }
-    public String getRoomNo() { return roomNo; }
-    public String getType() { return type; }
-    public String getStatus() { return status; }
-    public int getPrice() { return price; }
+    public String getRoomId() {
+        return roomId;
+    }
 
-    public void setRoomId(String roomId) { this.roomId = roomId; }
-    public void setRoomNo(String roomNo) { this.roomNo = roomNo; }
-    public void setType(String type) { this.type = type; }
-    public void setStatus(String status) { this.status = status; }
-    public void setPrice(int price) { this.price = price; }
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomNo() {
+        return roomNo;
+    }
+
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }
