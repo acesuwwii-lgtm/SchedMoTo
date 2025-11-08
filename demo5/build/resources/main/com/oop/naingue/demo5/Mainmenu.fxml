@@ -2,45 +2,169 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.oop.naingue.demo5.mainmenu.MainmenuController"
-            prefWidth="1200" prefHeight="700"
-            style="-fx-background-color: #f9fafc;">
+            prefWidth="1400" prefHeight="800"
+            style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);">
 
-
+    <!-- Top Header with Gradient and Shadow -->
     <top>
-        <HBox style="-fx-background-color: #ffffff; -fx-padding: 15 30 15 30;"
-              spacing="10" alignment="CENTER">
-            <Region HBox.hgrow="ALWAYS"/>
+        <VBox spacing="0">
+            <HBox style="-fx-background-color: linear-gradient(to right, #1e3a8a, #3b82f6);
+                         -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);"
+                  spacing="20" alignment="CENTER" prefHeight="80">
 
-            <Label text="SchedMoTo Dashboard"
-                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #007bff;" />
+                <!-- Logo/App Name -->
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Circle radius="20" fill="white" />
+                    <VBox spacing="2">
+                        <Label text="SchedMoTo"
+                               style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+                        <Label text="Welcome to"
+                               style="-fx-text-fill: #dbeafe; -fx-font-size: 12px;" />
+                    </VBox>
+                </HBox>
 
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Admin" onAction="#handleAdmin"
-                    style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-size: 14px; -fx-background-radius: 5; -fx-padding: 5 15;" />
-        </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- User Info and Admin Button -->
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <VBox spacing="2" alignment="CENTER_RIGHT">
+                        <Label text="Welcome, Admin"
+                               style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" />
+                        <Label text="Last login: Today, 10:30 AM"
+                               style="-fx-text-fill: #dbeafe; -fx-font-size: 11px;" />
+                    </VBox>
+                    <Button text="Admin Panel" onAction="#handleAdmin"
+                            style="-fx-background-color: rgba(255,255,255,0.2);
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 14px;
+                                   -fx-background-radius: 20;
+                                   -fx-padding: 8 20;
+                                   -fx-border-color: rgba(255,255,255,0.3);
+                                   -fx-border-radius: 20;
+                                   -fx-border-width: 1;
+                                   -fx-cursor: hand;" />
+                </HBox>
+            </HBox>
+
+            <!-- Secondary Navigation Bar -->
+            <HBox style="-fx-background-color: white; -fx-padding: 15 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);"
+                  spacing="30" alignment="CENTER_LEFT">
+                <Label text="Main Menu" style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" />
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
     </top>
 
-
+    <!-- Sidebar with Enhanced Design -->
     <left>
-        <VBox spacing="20" alignment="TOP_CENTER"
-              style="-fx-padding: 30; -fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;">
-            <Button text="Dashboard" fx:id="btnDashboard" onAction="#handleDashboard"
-                    style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
-            <Button text="Rooms" fx:id="btnRooms" onAction="#handleRoom"
-                    style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
-            <Button text="Booking" fx:id="btnBooking" onAction="#handleBooking"
-                    style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
-            <Button text="Payment" fx:id="btnPayment" onAction="#handlePayment"
-                    style="-fx-background-color: #ffc107; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 40; -fx-background-radius: 8;" />
+        <VBox spacing="12" alignment="TOP_CENTER"
+              style="-fx-padding: 30 20;
+                     -fx-background-color: white;
+                     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 2, 0);
+                     -fx-border-color: #f1f5f9;
+                     -fx-border-width: 0 1 0 0;">
+
+            <VBox spacing="8" alignment="CENTER">
+                <Button text="Dashboard" fx:id="btnDashboard" onAction="#handleDashboard"
+                        style="-fx-background-color: #1e40af;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(30, 64, 175, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="180" />
+
+                <Button text="Rooms" fx:id="btnRooms" onAction="#handleRoom"
+                        style="-fx-background-color: #007bff;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(0, 123, 255, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="180" />
+
+                <Button text="Booking" fx:id="btnBooking" onAction="#handleBooking"
+                        style="-fx-background-color: #059669;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="180" />
+
+                <Button text="Payment" fx:id="btnPayment" onAction="#handlePayment"
+                        style="-fx-background-color: #d97706;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="180" />
+            </VBox>
         </VBox>
     </left>
 
-    <!-- Main Content Area -->
+    <!-- Main Content Area with Card-like Design -->
     <center>
-        <StackPane fx:id="contentArea" style="-fx-background-color: #f9fafc;"/>
+        <StackPane fx:id="contentArea"
+                   style="-fx-background-color: transparent; -fx-padding: 30;">
+            <!-- Default welcome content when no section selected -->
+            <VBox alignment="CENTER" spacing="25" visible="true" fx:id="welcomeContent">
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="👋 Welcome to SchedMoTo"
+                           style="-fx-text-fill: #1f2937; -fx-font-size: 32px; -fx-font-weight: bold;" />
+                    <Label text="Select a section from the sidebar to get started"
+                           style="-fx-text-fill: #6b7280; -fx-font-size: 16px;" />
+                </VBox>
+
+                <!-- Quick Stats Cards -->
+                <HBox spacing="20" alignment="CENTER">
+                    <VBox style="-fx-background-color: white;
+                                -fx-background-radius: 15;
+                                -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="8" prefWidth="200">
+                        <Label text="🏨" style="-fx-font-size: 24px;" />
+                        <Label text="Total Rooms" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                        <Label text="45" style="-fx-text-fill: #1e40af; -fx-font-size: 28px; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white;
+                                -fx-background-radius: 15;
+                                -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="8" prefWidth="200">
+                        <Label text="📅" style="-fx-font-size: 24px;" />
+                        <Label text="Today's Bookings" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                        <Label text="12" style="-fx-text-fill: #059669; -fx-font-size: 28px; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white;
+                                -fx-background-radius: 15;
+                                -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="8" prefWidth="200">
+                        <Label text="💰" style="-fx-font-size: 24px;" />
+                        <Label text="Revenue Today" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                    </VBox>
+                </HBox>
+            </VBox>
+        </StackPane>
     </center>
+
 </BorderPane>

@@ -12,9 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * Main Menu Controller - Handles navigation between different views
- */
+
 public class MainmenuController {
 
     @FXML private StackPane contentArea;
@@ -71,7 +69,7 @@ public class MainmenuController {
     private void loadUI(String fxmlFile) {
         try {
             String fullPath = "/com/oop/naingue/demo5/mainmenu/" + fxmlFile;
-            System.out.println("🔍 Loading FXML: " + fullPath);
+            System.out.println("Loading FXML: " + fullPath);
 
             var resource = getClass().getResource(fullPath);
             if (resource == null) {
@@ -82,19 +80,15 @@ public class MainmenuController {
             Node node = loader.load();
 
             contentArea.getChildren().setAll(node);
-            System.out.println("✅ Successfully loaded: " + fxmlFile);
+            System.out.println("Successfully loaded: " + fxmlFile);
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Failed to load " + fxmlFile + ": " + e.getMessage());
+            System.err.println("Failed to load " + fxmlFile + ": " + e.getMessage());
             showErrorPlaceholder(fxmlFile, e.getMessage());
         }
     }
 
-
-    /**
-     * Show placeholder when view is not available
-     */
     private void showPlaceholder(String viewName) {
         try {
             javafx.scene.layout.VBox placeholder = new javafx.scene.layout.VBox(20);
@@ -118,13 +112,11 @@ public class MainmenuController {
             contentArea.getChildren().setAll(placeholder);
 
         } catch (Exception e) {
-            System.err.println("❌ Failed to create placeholder: " + e.getMessage());
+            System.err.println("Failed to create placeholder: " + e.getMessage());
         }
     }
 
-    /**
-     * Show error placeholder
-     */
+
     private void showErrorPlaceholder(String viewName, String errorMessage) {
         try {
             javafx.scene.layout.VBox placeholder = new javafx.scene.layout.VBox(20);
@@ -154,9 +146,6 @@ public class MainmenuController {
         }
     }
 
-    /**
-     * Handle logout
-     */
     @FXML
     private void handleLogout() {
         try {
