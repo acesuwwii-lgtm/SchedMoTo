@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PaymentController">
+  <tabs>
+    <Tab text="PAYMENTS">
+         <content>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Payment ID" />
+                              <TextField fx:id="paymentIdField" disable="true" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label text="Amount" />
+                              <TextField fx:id="amountField" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Payment Date" />
+                        <DatePicker fx:id="paymentDatePicker" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Payment Menthod" />
+                        <ComboBox fx:id="paymentMethodComboBox" prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="600.0">
+                     <children>
+                        <Label text="Payment Status" />
+                        <ComboBox fx:id="paymentStatusComboBox" prefWidth="150.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Receipt" />
+                        <Button fx:id="payNowButton" mnemonicParsing="false" onAction="#handlePayment" text="Pay Now" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content></Tab>
+  </tabs>
+</TabPane>
