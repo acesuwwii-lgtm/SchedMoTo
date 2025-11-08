@@ -18,17 +18,9 @@ public class DatabaseConnection {
     private static final String CONNECTION_URI =
             "mongodb+srv://admin123:admin@cluster0.b0o4ard.mongodb.net/?appName=Cluster0";
 
-    static {
-
-        System.setProperty("jdk.tls.client.protocols", "TLSv1.2");
-        System.setProperty("https.protocols", "TLSv1.2");
-    }
-
-
     public DatabaseConnection() {
         initializeMongoDB();
     }
-
 
     private void initializeMongoDB() {
         try {
@@ -51,7 +43,6 @@ public class DatabaseConnection {
         }
     }
 
-
     public boolean registerUser(UserData user) {
         try {
             if (user == null) {
@@ -69,7 +60,6 @@ public class DatabaseConnection {
                 System.err.println(" Could not access 'users' collection!");
                 return false;
             }
-
             System.out.println(" Registering user: " + user.getUsername());
 
 

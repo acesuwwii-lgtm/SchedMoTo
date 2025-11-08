@@ -17,8 +17,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class loginController implements Initializable {
 
+public class LoginController implements Initializable {
+
+    // LOGIN VIEW
     @FXML private VBox loginView;
     @FXML private TextField txtLoginUsername;
     @FXML private PasswordField txtLoginPassword;
@@ -26,6 +28,7 @@ public class loginController implements Initializable {
     @FXML private Hyperlink linkSignUp;
     @FXML private Button btnLogin;
 
+    // SIGN UP VIEW (embedded in login-view.fxml)
     @FXML private VBox signUpView;
     @FXML private TextField txtSignUpUsername;
     @FXML private TextField txtSignUpEmail;
@@ -37,18 +40,60 @@ public class loginController implements Initializable {
     @FXML private Hyperlink linkLogin;
     @FXML private Button btnSignUp;
 
-    private final DatabaseConnection database = new DatabaseConnection();
+    private DatabaseConnection database;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("loginController initialized");
+        System.out.println("✅ loginController initialized");
+        initializeDatabase();
         showLoginView();
     }
 
+    private void initializeDatabase() {
+        try {
+            database = new DatabaseConnection();
+            System.out.println("✅ Database connection established");
+        } catch (Exception e) {
+            System.err.println("❌ Database connection failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleShowLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("com.oop.naingue.demo5.login-view.fxml")
+            );
+            Parent loginRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(loginRoot));
+            stage.setTitle("Login - SchedMoTo");
+            stage.show();
+
+            System.out.println("✅ Login view loaded successfully!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("❌ Failed to load login-view.fxml: " + e.getMessage());
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Navigation Error");
+            alert.setHeaderText("Failed to Load Login Screen");
+            alert.setContentText("Could not load the login view. Please check the console for details.");
+            alert.showAndWait();
+        }
+    }
+
+    // ================= LOGIN =================
     @FXML
     private void handleLoginSubmit(ActionEvent event) {
         try {
-            lblLoginError.setVisible(false);
+            if (lblLoginError != null) {
+                lblLoginError.setVisible(false);
+            }
+
             String username = txtLoginUsername.getText().trim();
             String password = txtLoginPassword.getText().trim();
 
@@ -57,10 +102,17 @@ public class loginController implements Initializable {
                 return;
             }
 
+            if (database == null) {
+                showError(lblLoginError, "Database connection error. Please restart the application.");
+                return;
+            }
+
             UserData loggedInUser = database.loginUser(username, password);
+
             if (loggedInUser != null) {
+                System.out.println("✅ Login successful for: " + username);
                 showSuccessAlert("Login Successful", "Welcome back " + username + "!");
-                loadDashboard();
+                loadMainMenu(event);
             } else {
                 showError(lblLoginError, "Invalid username or password.");
             }
@@ -71,10 +123,13 @@ public class loginController implements Initializable {
         }
     }
 
+    // ================= SIGN UP (for embedded view) =================
     @FXML
     private void handleSignUpSubmit(ActionEvent event) {
         try {
-            lblSignUpError.setVisible(false);
+            if (lblSignUpError != null) {
+                lblSignUpError.setVisible(false);
+            }
 
             String username = txtSignUpUsername.getText().trim();
             String email = txtSignUpEmail.getText().trim();
@@ -97,8 +152,13 @@ public class loginController implements Initializable {
                 return;
             }
 
-            if (!chkTerms.isSelected()) {
+            if (chkTerms != null && !chkTerms.isSelected()) {
                 showError(lblSignUpError, "You must agree to the Terms and Conditions.");
+                return;
+            }
+
+            if (database == null) {
+                showError(lblSignUpError, "Database connection error. Please restart the application.");
                 return;
             }
 
@@ -129,10 +189,18 @@ public class loginController implements Initializable {
         }
     }
 
+    // ================= VIEW SWITCHING =================
     @FXML
     private void handleShowSignUp(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/registration-view.fxml"));
+            // Close database connection before navigating
+            if (database != null) {
+                database.close();
+            }
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("com.oop.naingue.demo5.registration-view.fxml")
+            );
             Parent registrationRoot = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -141,11 +209,12 @@ public class loginController implements Initializable {
             stage.setTitle("Register - SchedMoTo");
             stage.show();
 
-            System.out.println("Registration view loaded successfully!");
+            System.out.println("✅ Registration view loaded successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Failed to load registration-view.fxml: " + e.getMessage());
+            System.err.println("❌ Failed to load registration-view.fxml: " + e.getMessage());
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Navigation Error");
             alert.setHeaderText("Failed to Load Registration Screen");
@@ -154,29 +223,6 @@ public class loginController implements Initializable {
         }
     }
 
-    @FXML
-    private void handleShowLogin(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/login-view.fxml"));
-            Parent loginRoot = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(loginRoot));
-            stage.setTitle("Login - SchedMoTo");
-            stage.show();
-
-            System.out.println("Login view loaded successfully!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Failed to load login-view.fxml: " + e.getMessage());
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Navigation Error");
-            alert.setHeaderText("Failed to Load Login Screen");
-            alert.setContentText("Could not load the login view. Please check the console for details.");
-            alert.showAndWait();
-        }
-    }
 
     private void showLoginView() {
         if (loginView != null && signUpView != null) {
@@ -196,10 +242,44 @@ public class loginController implements Initializable {
         }
     }
 
+    // ================= LOAD MAIN MENU =================
+    private void loadMainMenu(ActionEvent event) {
+        try {
+            // Close database connection before navigating
+            if (database != null) {
+                database.close();
+            }
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/oop/naingue/demo5/Mainmenu.fxml")
+            );
+            Parent mainMenuRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(mainMenuRoot, 1200, 700);
+            stage.setScene(scene);
+            stage.setTitle("SchedMoTo - Dashboard");
+            stage.setResizable(true);
+            stage.show();
+
+            System.out.println("✅ Main menu loaded successfully!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("❌ Failed to load Mainmenu.fxml: " + e.getMessage());
+
+            // Fallback to simple dashboard if main menu fails
+            loadSimpleDashboard();
+        }
+    }
+
+    // ================= UTILITIES =================
     private void showError(Label label, String message) {
-        label.setText(message);
-        label.setStyle("-fx-text-fill: #d32f2f; -fx-font-size: 12px;");
-        label.setVisible(true);
+        if (label != null) {
+            label.setText("❌ " + message);
+            label.setStyle("-fx-text-fill: #d32f2f; -fx-font-size: 12px;");
+            label.setVisible(true);
+        }
     }
 
     private void showSuccessAlert(String title, String message) {
@@ -211,15 +291,15 @@ public class loginController implements Initializable {
     }
 
     private void clearSignUpForm() {
-        txtSignUpUsername.clear();
-        txtSignUpEmail.clear();
-        txtSignUpPhone.clear();
-        txtSignUpPassword.clear();
-        txtSignUpConfirmPassword.clear();
-        chkTerms.setSelected(false);
+        if (txtSignUpUsername != null) txtSignUpUsername.clear();
+        if (txtSignUpEmail != null) txtSignUpEmail.clear();
+        if (txtSignUpPhone != null) txtSignUpPhone.clear();
+        if (txtSignUpPassword != null) txtSignUpPassword.clear();
+        if (txtSignUpConfirmPassword != null) txtSignUpConfirmPassword.clear();
+        if (chkTerms != null) chkTerms.setSelected(false);
     }
 
-    private void loadDashboard() {
+    private void loadSimpleDashboard() {
         VBox dashboard = new VBox(20);
         dashboard.setStyle("-fx-padding: 20; -fx-alignment: center;");
 
@@ -227,7 +307,19 @@ public class loginController implements Initializable {
         welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button logout = new Button("Logout");
-        logout.setOnAction(e -> showLoginView());
+        logout.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        getClass().getResource("/com/oop/naingue/demo5/login-view.fxml")
+                );
+                Parent loginRoot = loader.load();
+                Stage stage = (Stage) dashboard.getScene().getWindow();
+                stage.setScene(new Scene(loginRoot));
+                stage.setTitle("Login - SchedMoTo");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         dashboard.getChildren().addAll(welcomeLabel, logout);
 
@@ -235,5 +327,12 @@ public class loginController implements Initializable {
         Stage stage = (Stage) loginView.getScene().getWindow();
         stage.setScene(scene);
         stage.setTitle("SchedMoTo - Dashboard");
+    }
+
+    public void cleanup() {
+        if (database != null) {
+            database.close();
+            System.out.println("🔌 Database connection closed");
+        }
     }
 }

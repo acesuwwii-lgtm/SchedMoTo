@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.oop.naingue.demo5.mainmenu.RoomController"
+            prefWidth="1000" prefHeight="700"
+            style="-fx-background-color:#f9fafc;">
+
+    <!-- Top title -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="10"
+              style="-fx-padding:20; -fx-background-color:#ffffff; -fx-border-color:#ddd; -fx-border-width:0 0 1 0;">
+            <Label text="Room Management"
+                   style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill:#222;"/>
+        </HBox>
+    </top>
+
+    <!-- Center TableView -->
+    <center>
+        <VBox spacing="15" style="-fx-padding:20;">
+            <TableView fx:id="roomTable"
+                       prefHeight="600"
+                       style="-fx-background-radius:10; -fx-border-radius:10; -fx-border-color:#ddd;">
+                <columns>
+                    <TableColumn fx:id="colRoomId" text="Room ID" prefWidth="100"/>
+                    <TableColumn fx:id="colRoomNo" text="Room Number" prefWidth="100"/>
+                    <TableColumn fx:id="colType" text="Room Type" prefWidth="150"/>
+                    <TableColumn fx:id="colStatus" text="Status" prefWidth="150"/>
+                    <TableColumn fx:id="colPrice" text="Price" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
