@@ -199,7 +199,7 @@ public class LoginController implements Initializable {
             }
 
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("com.oop.naingue.demo5.registration-view.fxml")
+                    getClass().getResource("/com/oop/naingue/demo5/registration-view.fxml")
             );
             Parent registrationRoot = loader.load();
 

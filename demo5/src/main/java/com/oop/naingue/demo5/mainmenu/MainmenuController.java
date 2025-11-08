@@ -70,45 +70,27 @@ public class MainmenuController {
      */
     private void loadUI(String fxmlFile) {
         try {
-            // Try multiple resource paths
-            String[] paths = {
-                    "/com/oop/naingue/demo5/mainmenu/" + fxmlFile,
-                    "/com/oop/naingue/demo5/" + fxmlFile,
-                    "/oop/calihat/mainmenu/" + fxmlFile
-            };
+            String fullPath = "/com/oop/naingue/demo5/mainmenu/" + fxmlFile;
+            System.out.println("🔍 Loading FXML: " + fullPath);
 
-            Node node = null;
-            IOException lastException = null;
-
-            for (String path : paths) {
-                try {
-                    System.out.println("🔍 Trying to load: " + path);
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
-                    node = loader.load();
-                    System.out.println("✅ Successfully loaded: " + path);
-                    break;
-                } catch (IOException | NullPointerException e) {
-                    lastException = (IOException) e;
-                    // Continue to next path
-                }
+            var resource = getClass().getResource(fullPath);
+            if (resource == null) {
+                throw new IOException("FXML file not found at: " + fullPath);
             }
 
-            if (node != null) {
-                contentArea.getChildren().setAll(node);
-            } else {
-                // Show placeholder if file not found
-                showPlaceholder(fxmlFile);
-                if (lastException != null) {
-                    System.err.println("❌ Failed to load " + fxmlFile + ": " + lastException.getMessage());
-                }
-            }
+            FXMLLoader loader = new FXMLLoader(resource);
+            Node node = loader.load();
 
-        } catch (Exception e) {
+            contentArea.getChildren().setAll(node);
+            System.out.println("✅ Successfully loaded: " + fxmlFile);
+
+        } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Error loading " + fxmlFile + ": " + e.getMessage());
+            System.err.println("❌ Failed to load " + fxmlFile + ": " + e.getMessage());
             showErrorPlaceholder(fxmlFile, e.getMessage());
         }
     }
+
 
     /**
      * Show placeholder when view is not available

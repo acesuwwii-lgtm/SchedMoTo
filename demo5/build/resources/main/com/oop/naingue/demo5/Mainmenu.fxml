@@ -9,7 +9,7 @@
             prefWidth="1200" prefHeight="700"
             style="-fx-background-color: #f9fafc;">
 
-    <!-- Top Bar -->
+
     <top>
         <HBox style="-fx-background-color: #ffffff; -fx-padding: 15 30 15 30;"
               spacing="10" alignment="CENTER">
@@ -24,7 +24,7 @@
         </HBox>
     </top>
 
-    <!-- Sidebar Buttons -->
+
     <left>
         <VBox spacing="20" alignment="TOP_CENTER"
               style="-fx-padding: 30; -fx-background-color: #ffffff; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;">
