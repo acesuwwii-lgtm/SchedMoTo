@@ -3,13 +3,22 @@ package com.oop.naingue.demo5.controller;
 import com.oop.naingue.demo5.data.DatabaseConnection;
 import com.oop.naingue.demo5.data.UserData;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+/**
+ * Registration Controller - Handles user registration
+ */
 public class Registration implements Initializable {
 
     @FXML private TextField txtUsername;
@@ -18,6 +27,8 @@ public class Registration implements Initializable {
     @FXML private TextField txtPhone;
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtConfirmPassword;
+    @FXML private Button btnRegister;
+    @FXML private Hyperlink linkLogin;
     @FXML private Label lblError;
     @FXML private Label lblSuccess;
 
@@ -32,16 +43,16 @@ public class Registration implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeDatabase();
         setupErrorClearListeners();
-        System.out.println("RegistrationController initialized successfully!");
+        System.out.println("✅ RegistrationController initialized successfully!");
     }
 
     private void initializeDatabase() {
         try {
             databaseConnection = new DatabaseConnection();
-            System.out.println("Database connection initialized successfully!");
+            System.out.println("✅ Database connection initialized successfully!");
         } catch (Exception e) {
-            System.err.println("Failed to initialize database connection: " + e.getMessage());
-            showErrorMessage("Database connection failed. Please check your connection and try again.");
+            System.err.println("❌ Failed to initialize database connection: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -62,7 +73,7 @@ public class Registration implements Initializable {
         clearMessages();
 
         if (databaseConnection == null) {
-            showErrorMessage("Database connection is not available. Please try again.");
+            showErrorMessage("Database connection is not available. Please restart the application.");
             return;
         }
 
@@ -73,8 +84,9 @@ public class Registration implements Initializable {
         String password = txtPassword.getText();
         String confirmPassword = txtConfirmPassword.getText();
 
+        // Validation
         if (username.isEmpty() || email.isEmpty() || address.isEmpty() ||
-                phone.isEmpty() || password.isEmpty()) {
+                phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showErrorMessage("Please fill in all required fields (marked with *)");
             return;
         }
@@ -114,21 +126,24 @@ public class Registration implements Initializable {
             return;
         }
 
+        // Check if username exists
         if (databaseConnection.usernameExists(username)) {
             showErrorMessage("Username already exists. Please choose a different username.");
             return;
         }
 
+        // Check if email exists
         if (databaseConnection.emailExists(email)) {
             showErrorMessage("This email is already registered. Please login or use a different email.");
             return;
         }
 
-        UserData newUser = new UserData(username, email, address, phone, password);
+        // Register user
+        UserData newUser = new UserData(username, email, phone, address, password);
         boolean registrationSuccess = databaseConnection.registerUser(newUser);
 
         if (registrationSuccess) {
-            System.out.println("New user registered in database:");
+            System.out.println("✅ New user registered in database:");
             System.out.println("  Username: " + username);
             System.out.println("  Email: " + email);
             System.out.println("  Address: " + address);
@@ -136,6 +151,7 @@ public class Registration implements Initializable {
 
             showSuccessMessage("Account created successfully! You can now login.");
             clearForm();
+
             showSuccessAlert(
                     "Registration Successful",
                     "Welcome to SchedMoTo!",
@@ -150,26 +166,28 @@ public class Registration implements Initializable {
     @FXML
     private void handleShowLogin(javafx.event.ActionEvent event) {
         try {
+            // Close database connection before navigating
             if (databaseConnection != null) {
                 databaseConnection.close();
             }
 
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+            FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/oop/naingue/demo5/login-view.fxml")
             );
-            javafx.scene.Parent loginRoot = loader.load();
-            javafx.stage.Stage stage = (javafx.stage.Stage)
-                    ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            javafx.scene.Scene scene = new javafx.scene.Scene(loginRoot);
+            Parent loginRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loginRoot);
             stage.setScene(scene);
             stage.setTitle("Login - SchedMoTo");
             stage.show();
 
-            System.out.println("Login view loaded successfully!");
+            System.out.println("✅ Login view loaded successfully!");
 
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Failed to load login-view.fxml: " + e.getMessage());
+            System.err.println("❌ Failed to load login-view.fxml: " + e.getMessage());
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Navigation Error");
             alert.setHeaderText("Failed to Load Login Screen");
@@ -189,7 +207,7 @@ public class Registration implements Initializable {
 
     private void showErrorMessage(String message) {
         if (lblError != null) {
-            lblError.setText(message);
+            lblError.setText("❌ " + message);
             lblError.setVisible(true);
         }
         if (lblSuccess != null) {
@@ -199,7 +217,7 @@ public class Registration implements Initializable {
 
     private void showSuccessMessage(String message) {
         if (lblSuccess != null) {
-            lblSuccess.setText(message);
+            lblSuccess.setText("✅ " + message);
             lblSuccess.setVisible(true);
         }
         if (lblError != null) {
@@ -235,7 +253,7 @@ public class Registration implements Initializable {
     public void cleanup() {
         if (databaseConnection != null) {
             databaseConnection.close();
-            System.out.println("Database connection closed in cleanup");
+            System.out.println("🔌 Database connection closed in cleanup");
         }
     }
 }

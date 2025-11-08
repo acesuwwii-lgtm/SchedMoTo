@@ -17,7 +17,7 @@ val junitVersion = "5.12.1"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(23)
     }
 }
 
@@ -27,7 +27,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("com.oop.naingue.demo5")
-    mainClass.set("com.oop.naingue.demo5.HelloApplication")
+    mainClass.set("com.oop.naingue.demo5.application.loginApplicaion")
 }
 
 javafx {
