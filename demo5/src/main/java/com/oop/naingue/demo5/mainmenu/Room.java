@@ -1,57 +1,28 @@
 package com.oop.naingue.demo5.mainmenu;
 
+import javafx.beans.property.*;
+
 public class Room {
-    private String roomId;
-    private String roomNo;
-    private String type;
-    private String status;
-    private int price;
+    private final StringProperty roomId;
+    private final StringProperty roomNumber;
+    private final StringProperty roomType;
+    private final StringProperty status;
+    private final DoubleProperty price;
 
-    public Room(String roomId, String roomNo, String type, String status, int price) {
-        this.roomId = roomId;
-        this.roomNo = roomNo;
-        this.type = type;
-        this.status = status;
-        this.price = price;
+    public Room(String roomId, String roomNumber, String roomType, String status, double price) {
+        this.roomId = new SimpleStringProperty(roomId);
+        this.roomNumber = new SimpleStringProperty(roomNumber);
+        this.roomType = new SimpleStringProperty(roomType);
+        this.status = new SimpleStringProperty(status);
+        this.price = new SimpleDoubleProperty(price);
     }
 
-    public String getRoomId() {
-        return roomId;
-    }
+    // ✅ Getters used by your controller
+    public String getRoomId() { return roomId.get(); }     // Matches controller call
+    public String getRoomNo() { return roomNumber.get(); } // For txtRoomNo
+    public String getRoomNumber() { return roomNumber.get(); }
+    public String getRoomType() { return roomType.get(); }
+    public String getStatus() { return status.get(); }
+    public double getPrice() { return price.get(); }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
-    public String getRoomNo() {
-        return roomNo;
-    }
-
-    public void setRoomNo(String roomNo) {
-        this.roomNo = roomNo;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 }
