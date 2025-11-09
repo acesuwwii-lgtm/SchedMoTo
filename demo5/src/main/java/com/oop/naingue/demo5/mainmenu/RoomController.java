@@ -1,18 +1,21 @@
 package com.oop.naingue.demo5.mainmenu;
 
+import com.oop.naingue.demo5.controller.BookingListController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableCell;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.util.List;
 
-/**
- * Room Controller - Manages room display and operations
- */
 public class RoomController {
 
     @FXML private TableView<Room> roomTable;
@@ -20,137 +23,91 @@ public class RoomController {
     @FXML private TableColumn<Room, String> colRoomNo;
     @FXML private TableColumn<Room, String> colType;
     @FXML private TableColumn<Room, String> colStatus;
-    @FXML private TableColumn<Room, Integer> colPrice;
+    @FXML private TableColumn<Room, Double> colPrice;
 
     private final ObservableList<Room> roomList = FXCollections.observableArrayList();
     private RoomDAO roomDAO;
 
     @FXML
     private void initialize() {
-        System.out.println("✅ RoomController initialized");
+        roomDAO = new RoomDAO();
 
-        try {
-            // Initialize DAO
-            roomDAO = new RoomDAO();
-
-            // Set up table columns
-            setupTableColumns();
-
-            // Load room data
-            loadRoomsFromDatabase();
-
-        } catch (Exception e) {
-            System.err.println("❌ Failed to initialize RoomController: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void setupTableColumns() {
-        // Set up column value factories
+        // Initialize table columns
         colRoomId.setCellValueFactory(new PropertyValueFactory<>("roomId"));
         colRoomNo.setCellValueFactory(new PropertyValueFactory<>("roomNo"));
-        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        colType.setCellValueFactory(new PropertyValueFactory<>("roomType"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        // Style "Status" column with colors
-        colStatus.setCellFactory(column -> new TableCell<Room, String>() {
-            @Override
-            protected void updateItem(String status, boolean empty) {
-                super.updateItem(status, empty);
+        // Load data
+        loadRooms();
 
-                if (empty || status == null) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    setText(status);
-
-                    // Apply color based on status
-                    switch (status) {
-                        case "Available":
-                            setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-                            break;
-                        case "Booked":
-                            setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-                            break;
-                        case "Under Maintenance":
-                            setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
-                            break;
-                        case "Capacity Full":
-                            setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
-                            break;
-                        default:
-                            setStyle("");
-                            break;
-                    }
-                }
-            }
-        });
+        // Handle double-click to open booking
+        roomTable.setOnMouseClicked(this::handleRoomClick);
     }
 
-    private void loadRoomsFromDatabase() {
-        try {
-            roomList.clear();
-            List<Room> roomsFromDB = roomDAO.getAllRooms();
+    private void loadRooms() {
+        roomList.clear();
+        List<Room> rooms = roomDAO.getAllRooms();
+        if (rooms != null) roomList.addAll(rooms);
+        roomTable.setItems(roomList);
+    }
 
-            if (roomsFromDB == null || roomsFromDB.isEmpty()) {
-                System.out.println("⚠️ No rooms found in MongoDB. Inserting demo data...");
-                createDefaultRooms();
-                roomsFromDB = roomDAO.getAllRooms();
+    private void handleRoomClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // Double-click to book
+            Room selected = roomTable.getSelectionModel().getSelectedItem();
+            if (selected == null) return;
+
+            String status = selected.getStatus();
+
+            // ✅ Block unavailable rooms
+            if (!"Available".equalsIgnoreCase(status)) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Room Unavailable");
+                alert.setHeaderText("Cannot book this room");
+                alert.setContentText("Room " + selected.getRoomNo() + " is currently: " + status);
+                alert.getButtonTypes().setAll(javafx.scene.control.ButtonType.CLOSE);
+                alert.showAndWait();
+                return;
             }
 
-            if (roomsFromDB != null) {
-                roomList.addAll(roomsFromDB);
-                roomTable.setItems(roomList);
-                System.out.println("✅ Loaded " + roomList.size() + " rooms");
-            }
-
-        } catch (Exception e) {
-            System.err.println("❌ Failed to load rooms: " + e.getMessage());
-            e.printStackTrace();
+            // Proceed to booking page
+            openBookingList(selected);
         }
     }
 
-    /**
-     * Create demo data if DB is empty
-     */
-    private void createDefaultRooms() {
+    private void openBookingList(Room room) {
         try {
-            String[] types = {"Single", "Double", "Suite"};
-            int[] prices = {1500, 3000, 5000};
-            String[] statuses = {"Available", "Booked", "Under Maintenance", "Capacity Full"};
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/BookingList.fxml"));
+            Parent root = loader.load();
 
-            int roomCount = 1;
+            BookingListController bookingController = loader.getController();
+            bookingController.setSelectedRoom(room);
 
-            for (int floor = 1; floor <= 3; floor++) {
-                for (int i = 0; i < types.length; i++) {
-                    for (int j = 0; j < 2; j++) {
-                        String roomId = "F" + floor + types[i].charAt(0) + (j + 1);
-                        String roomNo = floor + String.format("%02d", roomCount++);
-                        String type = types[i];
-                        String status = statuses[(int) (Math.random() * statuses.length)];
-                        int price = prices[i];
 
-                        Room room = new Room(roomId, roomNo, type, status, price);
-                        roomDAO.addRoom(room);
-                    }
-                }
+            if (CurrentUser.getInstance().isLoggedIn()) {
+                bookingController.setUserInfo(
+                        CurrentUser.getInstance().getFullName(),
+                        CurrentUser.getInstance().getContactInfo()
+                );
             }
 
-            System.out.println("✅ Sample rooms inserted into MongoDB!");
+
+            bookingController.setSelectedRoom(room);
+
+
+            Stage stage = new Stage();
+            stage.setTitle("Booking Information");
+            stage.setScene(new Scene(root));
+            stage.show();
 
         } catch (Exception e) {
-            System.err.println("❌ Failed to create default rooms: " + e.getMessage());
             e.printStackTrace();
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Failed to load booking page");
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
         }
-    }
-
-    /**
-     * Refresh room data (can be called by button)
-     */
-    @FXML
-    private void refreshRooms() {
-        System.out.println("🔄 Refreshing rooms...");
-        loadRoomsFromDatabase();
     }
 }

@@ -9,6 +9,7 @@ module com.oop.naingue.demo5 {
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
+    requires java.desktop;
 
     opens com.oop.naingue.demo5 to javafx.fxml;
     exports com.oop.naingue.demo5;

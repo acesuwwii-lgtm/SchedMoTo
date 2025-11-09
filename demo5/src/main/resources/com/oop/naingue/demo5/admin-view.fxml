@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.oop.naingue.demo5.controller.AdminController"
+            prefWidth="1400" prefHeight="800"
+            style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);">
+
+    <!-- Top Bar -->
+    <top>
+        <VBox spacing="0">
+            <HBox style="-fx-background-color: linear-gradient(to right, #dc2626, #ef4444);
+                         -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);"
+                  spacing="20" alignment="CENTER" prefHeight="80">
+
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                        <Image url="@/com/oop/naingue/demo5/images/logoWbg.png" />
+                    </ImageView>
+                    <VBox spacing="2">
+                        <Label text="SchedMoTo Admin"
+                               style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" />
+                        <Label text="Hotel Management Admin Panel"
+                               style="-fx-text-fill: #fecaca; -fx-font-size: 12px;" />
+                    </VBox>
+                </HBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="lblAdminName" text="Admin"
+                       style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+                <Button text="Logout" onAction="#handleLogout"
+                        style="-fx-background-color: rgba(255, 255, 255, 0.2);
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 10 20;
+                               -fx-background-radius: 8;
+                               -fx-border-color: white;
+                               -fx-border-width: 1.5;
+                               -fx-border-radius: 8;
+                               -fx-cursor: hand;"/>
+
+                <padding>
+                    <Insets left="30" right="30" />
+                </padding>
+            </HBox>
+
+            <HBox style="-fx-background-color: white; -fx-padding: 15 30;
+                         -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);"
+                  spacing="30" alignment="CENTER_LEFT">
+                <Label text="Admin Dashboard"
+                       style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" />
+                <Region HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Left Sidebar -->
+    <left>
+        <VBox spacing="12" alignment="TOP_CENTER"
+              style="-fx-padding: 30 20;
+                     -fx-background-color: white;
+                     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 2, 0);
+                     -fx-border-color: #f1f5f9;
+                     -fx-border-width: 0 1 0 0;">
+
+            <VBox spacing="8" alignment="CENTER">
+                <Button text="📊 Dashboard" fx:id="btnDashboard" onAction="#showDashboard"
+                        style="-fx-background-color: #dc2626;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(220, 38, 38, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="200" />
+
+                <Button text="🏨 Manage Rooms" fx:id="btnManageRooms" onAction="#showManageRooms"
+                        style="-fx-background-color: #007bff;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(0, 123, 255, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="200" />
+
+                <Button text="📅 Manage Bookings" fx:id="btnManageBookings" onAction="#showManageBookings"
+                        style="-fx-background-color: #059669;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="200" />
+
+                <Button text="👥 Manage Users" fx:id="btnManageUsers" onAction="#showManageUsers"
+                        style="-fx-background-color: #8b5cf6;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(139, 92, 246, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="200" />
+
+                <Button text="💰 Payments" fx:id="btnPayments" onAction="#showPayments"
+                        style="-fx-background-color: #d97706;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="200" />
+
+                <Button text="📈 Reports" fx:id="btnReports" onAction="#showReports"
+                        style="-fx-background-color: #0891b2;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-padding: 12 25;
+                               -fx-background-radius: 10;
+                               -fx-effect: dropshadow(three-pass-box, rgba(8, 145, 178, 0.3), 8, 0, 0, 2);
+                               -fx-cursor: hand;"
+                        prefWidth="200" />
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Main Content Area -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: transparent; -fx-padding: 30;">
+
+            <!-- Dashboard View -->
+            <VBox fx:id="dashboardView" spacing="25" visible="true">
+                <Label text="📊 Dashboard Overview"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1f2937;"/>
+
+                <!-- Stats Cards -->
+                <HBox spacing="20" alignment="CENTER">
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="10" prefWidth="250">
+                        <Label text="🏨" style="-fx-font-size: 32px;" />
+                        <Label text="Total Rooms" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                        <Label fx:id="lblTotalRooms" text="0"
+                               style="-fx-text-fill: #007bff; -fx-font-size: 36px; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="10" prefWidth="250">
+                        <Label text="📅" style="-fx-font-size: 32px;" />
+                        <Label text="Active Bookings" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                        <Label fx:id="lblActiveBookings" text="0"
+                               style="-fx-text-fill: #059669; -fx-font-size: 36px; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="10" prefWidth="250">
+                        <Label text="👥" style="-fx-font-size: 32px;" />
+                        <Label text="Total Users" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                        <Label fx:id="lblTotalUsers" text="0"
+                               style="-fx-text-fill: #8b5cf6; -fx-font-size: 36px; -fx-font-weight: bold;" />
+                    </VBox>
+
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);"
+                          alignment="CENTER" spacing="10" prefWidth="250">
+                        <Label text="💰" style="-fx-font-size: 32px;" />
+                        <Label text="Total Revenue" style="-fx-text-fill: #6b7280; -fx-font-size: 14px;" />
+                        <Label fx:id="lblTotalRevenue" text="₱0.00"
+                               style="-fx-text-fill: #d97706; -fx-font-size: 36px; -fx-font-weight: bold;" />
+                    </VBox>
+                </HBox>
+
+                <!-- Recent Activity -->
+                <VBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20;
+                                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 15, 0, 0, 5);">
+                    <Label text="📋 Recent Bookings" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                    <TableView fx:id="tblRecentBookings" prefHeight="300">
+                        <columns>
+                            <TableColumn fx:id="colBookingId" text="Booking ID" prefWidth="150"/>
+                            <TableColumn fx:id="colCustomerName" text="Customer" prefWidth="180"/>
+                            <TableColumn fx:id="colRoomNo" text="Room" prefWidth="100"/>
+                            <TableColumn fx:id="colCheckIn" text="Check-in" prefWidth="120"/>
+                            <TableColumn fx:id="colCheckOut" text="Check-out" prefWidth="120"/>
+                            <TableColumn fx:id="colStatus" text="Status" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <!-- Manage Rooms View -->
+            <VBox fx:id="manageRoomsView" spacing="20" visible="false">
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label text="🏨 Manage Rooms" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="➕ Add New Room" onAction="#handleAddRoom"
+                            style="-fx-background-color: #4CAF50; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8;"/>
+                </HBox>
+
+                <TableView fx:id="tblRooms" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colRoomId" text="Room ID" prefWidth="120"/>
+                        <TableColumn fx:id="colRoomNumber" text="Room No" prefWidth="100"/>
+                        <TableColumn fx:id="colRoomType" text="Type" prefWidth="150"/>
+                        <TableColumn fx:id="colRoomStatus" text="Status" prefWidth="120"/>
+                        <TableColumn fx:id="colRoomPrice" text="Price" prefWidth="100"/>
+                        <TableColumn fx:id="colRoomActions" text="Actions" prefWidth="200"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Manage Bookings View -->
+            <VBox fx:id="manageBookingsView" spacing="20" visible="false">
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label text="📅 Manage Bookings" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="cmbBookingFilter" promptText="Filter by Status" prefWidth="150"/>
+                    <Button text="🔄 Refresh" onAction="#refreshBookings"
+                            style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-padding: 8 16;"/>
+                </HBox>
+
+                <TableView fx:id="tblBookings" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colBookId" text="Booking ID" prefWidth="150"/>
+                        <TableColumn fx:id="colBookCustomer" text="Customer" prefWidth="180"/>
+                        <TableColumn fx:id="colBookRoom" text="Room" prefWidth="100"/>
+                        <TableColumn fx:id="colBookCheckIn" text="Check-in" prefWidth="120"/>
+                        <TableColumn fx:id="colBookCheckOut" text="Check-out" prefWidth="120"/>
+                        <TableColumn fx:id="colBookStatus" text="Status" prefWidth="120"/>
+                        <TableColumn fx:id="colBookActions" text="Actions" prefWidth="200"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Manage Users View -->
+            <VBox fx:id="manageUsersView" spacing="20" visible="false">
+                <Label text="👥 Manage Users" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+                <TableView fx:id="tblUsers" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colUsername" text="Username" prefWidth="150"/>
+                        <TableColumn fx:id="colEmail" text="Email" prefWidth="200"/>
+                        <TableColumn fx:id="colPhone" text="Phone" prefWidth="150"/>
+                        <TableColumn fx:id="colAddress" text="Address" prefWidth="200"/>
+                        <TableColumn fx:id="colUserType" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="colUserActions" text="Actions" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Payments View -->
+            <VBox fx:id="paymentsView" spacing="20" visible="false">
+                <Label text="💰 Payment Records" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+                <TableView fx:id="tblPayments" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colPayBookingId" text="Booking ID" prefWidth="150"/>
+                        <TableColumn fx:id="colPayRoomNo" text="Room" prefWidth="100"/>
+                        <TableColumn fx:id="colPayAmount" text="Amount" prefWidth="120"/>
+                        <TableColumn fx:id="colPayMethod" text="Method" prefWidth="150"/>
+                        <TableColumn fx:id="colPayDate" text="Date" prefWidth="150"/>
+                        <TableColumn fx:id="colPayStatus" text="Status" prefWidth="120"/>
+                        <TableColumn fx:id="colPayReceipt" text="Receipt" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Reports View -->
+            <VBox fx:id="reportsView" spacing="20" visible="false">
+                <Label text="📈 System Reports" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="15">
+                    <Button text="Generate Report" onAction="#generateReport"
+                            style="-fx-background-color: #0891b2; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-padding: 10 20;"/>
+                    <Button text="Export to CSV" onAction="#exportReport"
+                            style="-fx-background-color: #059669; -fx-text-fill: white;
+                                   -fx-font-weight: bold; -fx-padding: 10 20;"/>
+                </HBox>
+
+                <TextArea fx:id="txtReportArea" editable="false" VBox.vgrow="ALWAYS"
+                          style="-fx-font-family: 'Courier New'; -fx-font-size: 13px;"/>
+            </VBox>
+
+        </StackPane>
+    </center>
+</BorderPane>

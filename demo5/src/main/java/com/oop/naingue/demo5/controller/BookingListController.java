@@ -1,77 +1,135 @@
 package com.oop.naingue.demo5.controller;
 
+import com.oop.naingue.demo5.mainmenu.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
-import java.time.LocalDate;
+import java.util.UUID;
 
 public class BookingListController {
 
-    @FXML private TextField bookingIdField;
-    @FXML private TextField customerIdField;
-    @FXML private TextField roomIdField;
-    @FXML private DatePicker checkInDate;
-    @FXML private DatePicker checkOutDate;
+    @FXML
+    private TextField txtFullName;
+    @FXML
+    private TextField txtContactInfo;
+    @FXML
+    private DatePicker dpCheckIn;
+    @FXML
+    private DatePicker dpCheckOut;
+    @FXML
+    private TextField txtRoomType;
+    @FXML
+    private TextField txtRoomId;
+    @FXML
+    private TextField txtRoomNo;
+
+    private Room selectedRoom;
+    private final BookingDAO bookingDAO = new BookingDAO();
+
+    @FXML
+    public void initialize() {
+        // Automatically set checkout 1 day after check-in
+        dpCheckIn.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null && (dpCheckOut.getValue() == null || !dpCheckOut.getValue().isAfter(newVal))) {
+                dpCheckOut.setValue(newVal.plusDays(1));
+            }
+        });
+    }
+
+    public void setSelectedRoom(Room room) {
+        this.selectedRoom = room;
+        if (room != null) {
+            txtRoomId.setText(room.getRoomId());
+            txtRoomNo.setText(room.getRoomNo());
+            txtRoomType.setText(room.getRoomType());
+        }
+    }
+
+    public void setUserInfo(String fullName, String contactInfo) {
+        txtFullName.setText(fullName);
+        txtContactInfo.setText(contactInfo);
+    }
 
     @FXML
     private void onSaveBooking() {
-        String bookingId = bookingIdField.getText().trim();
-        String customerId = customerIdField.getText().trim();
-        String roomId = roomIdField.getText().trim();
-        LocalDate checkIn = checkInDate.getValue();
-        LocalDate checkOut = checkOutDate.getValue();
+        try {
+            if (txtFullName.getText().isEmpty() ||
+                    txtContactInfo.getText().isEmpty() ||
+                    dpCheckIn.getValue() == null ||
+                    dpCheckOut.getValue() == null ||
+                    txtRoomType.getText().isEmpty()) {
 
-        // Validate inputs
-        StringBuilder errors = new StringBuilder();
+                showAlert(Alert.AlertType.WARNING, "⚠️ Please fill in all required fields before saving.");
+                return;
+            }
 
-        if (bookingId.isEmpty()) {
-            errors.append("Booking ID is required.\n");
+            // Generate booking ID
+            String bookingId = "BKG-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
+
+            Booking booking = new Booking();
+            booking.setBookingId(bookingId);
+
+            if (CurrentUser.getInstance().isLoggedIn()) {
+                booking.setCustomerId(CurrentUser.getInstance().getCustomerId().toString());
+            }
+
+            booking.setFullName(txtFullName.getText());
+            booking.setContactInfo(txtContactInfo.getText());
+            booking.setRoomNo(selectedRoom != null ? selectedRoom.getRoomNumber() : "N/A");
+            booking.setRoomType(txtRoomType.getText());
+            booking.setCheckInDate(dpCheckIn.getValue());
+            booking.setCheckOutDate(dpCheckOut.getValue());
+
+            // Save to DB
+            bookingDAO.addBooking(booking);
+
+            showAlert(Alert.AlertType.INFORMATION,
+                    "✅ Booking successfully saved!\nBooking ID: " + bookingId);
+
+            // Load Payment.fxml and pass data
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/Payment.fxml"));
+            Parent paymentRoot = loader.load();
+
+            PaymentController paymentController = loader.getController();
+            paymentController.setPaymentDetails(
+                    bookingId,
+                    txtRoomId.getText(),
+                    selectedRoom != null ? selectedRoom.getPrice() : 0.0
+            );
+
+            Stage stage = (Stage) txtFullName.getScene().getWindow();
+            stage.setScene(new Scene(paymentRoot));
+            stage.setTitle("Payment - SchedMoTo");
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "❌ Error saving booking: " + e.getMessage());
         }
+    }
 
-        if (customerId.isEmpty()) {
-            errors.append("Customer ID is required.\n");
-        }
+    @FXML
+    private void onCancel() {
+        Stage stage = (Stage) txtFullName.getScene().getWindow();
+        stage.close();
+    }
 
-        if (roomId.isEmpty()) {
-            errors.append("Room ID is required.\n");
-        }
+    private void showAlert(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(type == Alert.AlertType.ERROR ? "Error" : "Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
-        if (checkIn == null) {
-            errors.append("Check-in date is required.\n");
-        }
-
-        if (checkOut == null) {
-            errors.append("Check-out date is required.\n");
-        }
-
-        if (checkIn != null && checkOut != null && checkOut.isBefore(checkIn)) {
-            errors.append("Check-out date cannot be before check-in date.\n");
-        }
-
-        if (errors.length() > 0) {
-            // Show validation errors
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("Please fix the following errors:");
-            alert.setContentText(errors.toString());
-            alert.showAndWait();
-            return; // Keep the form open for corrections
-        }
-
-        // If all valid, proceed to save booking
-        Alert success = new Alert(Alert.AlertType.INFORMATION);
-        success.setTitle("Booking Saved");
-        success.setHeaderText(null);
-        success.setContentText("Booking successfully saved:\nBooking ID: " + bookingId);
-        success.showAndWait();
-
-        // Optional: clear fields after successful save
-        bookingIdField.clear();
-        customerIdField.clear();
-        roomIdField.clear();
-        checkInDate.setValue(null);
-        checkOutDate.setValue(null);
+    private void clearForm() {
+        txtFullName.clear();
+        txtContactInfo.clear();
+        dpCheckIn.setValue(null);
+        dpCheckOut.setValue(null);
     }
 }

@@ -12,11 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.bson.Document;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 public class LoginController implements Initializable {
 
@@ -28,7 +28,6 @@ public class LoginController implements Initializable {
     @FXML private Hyperlink linkSignUp;
     @FXML private Button btnLogin;
 
-    // SIGN UP VIEW (embedded in login-view.fxml)
     @FXML private VBox signUpView;
     @FXML private TextField txtSignUpUsername;
     @FXML private TextField txtSignUpEmail;
@@ -44,7 +43,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("✅ loginController initialized");
+        System.out.println("✅ LoginController initialized");
         initializeDatabase();
         showLoginView();
     }
@@ -56,33 +55,6 @@ public class LoginController implements Initializable {
         } catch (Exception e) {
             System.err.println("❌ Database connection failed: " + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleShowLogin(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("com.oop.naingue.demo5.login-view.fxml")
-            );
-            Parent loginRoot = loader.load();
-
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(loginRoot));
-            stage.setTitle("Login - SchedMoTo");
-            stage.show();
-
-            System.out.println("✅ Login view loaded successfully!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("❌ Failed to load login-view.fxml: " + e.getMessage());
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Navigation Error");
-            alert.setHeaderText("Failed to Load Login Screen");
-            alert.setContentText("Could not load the login view. Please check the console for details.");
-            alert.showAndWait();
         }
     }
 
@@ -107,12 +79,22 @@ public class LoginController implements Initializable {
                 return;
             }
 
+            // ✅ Check user type (customer or admin)
             UserData loggedInUser = database.loginUser(username, password);
 
             if (loggedInUser != null) {
                 System.out.println("✅ Login successful for: " + username);
-                showSuccessAlert("Login Successful", "Welcome back " + username + "!");
-                loadMainMenu(event);
+
+                // Get user type from database
+                String userType = getUserType(username);
+
+                if ("admin".equalsIgnoreCase(userType)) {
+                    showSuccessAlert("Admin Login", "Welcome Administrator!");
+                    loadAdminDashboard(event);
+                } else {
+                    showSuccessAlert("Login Successful", "Welcome back " + username + "!");
+                    loadMainMenu(event);
+                }
             } else {
                 showError(lblLoginError, "Invalid username or password.");
             }
@@ -123,7 +105,35 @@ public class LoginController implements Initializable {
         }
     }
 
-    // ================= SIGN UP (for embedded view) =================
+    /**
+     * Get user type from database
+     */
+    private String getUserType(String username) {
+        try {
+            // Use MongoClient to get the database directly
+            com.mongodb.client.MongoClient mongoClient = com.mongodb.client.MongoClients.create(
+                    "mongodb+srv://admin123:admin@cluster0.b0o4ard.mongodb.net/?appName=Cluster0"
+            );
+            com.mongodb.client.MongoDatabase db = mongoClient.getDatabase("Schedmoto");
+            com.mongodb.client.MongoCollection<Document> usersCollection = db.getCollection("users");
+
+            Document userDoc = usersCollection
+                    .find(new Document("username", username))
+                    .first();
+
+            mongoClient.close();
+
+            if (userDoc != null) {
+                String userType = userDoc.getString("userType");
+                return userType != null ? userType : "customer";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "customer"; // default
+    }
+
+    // ================= SIGN UP =================
     @FXML
     private void handleSignUpSubmit(ActionEvent event) {
         try {
@@ -193,7 +203,6 @@ public class LoginController implements Initializable {
     @FXML
     private void handleShowSignUp(ActionEvent event) {
         try {
-            // Close database connection before navigating
             if (database != null) {
                 database.close();
             }
@@ -223,7 +232,6 @@ public class LoginController implements Initializable {
         }
     }
 
-
     private void showLoginView() {
         if (loginView != null && signUpView != null) {
             loginView.setVisible(true);
@@ -242,10 +250,42 @@ public class LoginController implements Initializable {
         }
     }
 
+    // ================= LOAD ADMIN DASHBOARD =================
+    private void loadAdminDashboard(ActionEvent event) {
+        try {
+            if (database != null) {
+                database.close();
+            }
+
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/oop/naingue/demo5/Admin-view.fxml")
+            );
+            Parent adminRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(adminRoot, 1400, 800);
+            stage.setScene(scene);
+            stage.setTitle("SchedMoTo - Admin Dashboard");
+            stage.setResizable(true);
+            stage.show();
+
+            System.out.println("✅ Admin dashboard loaded successfully!");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("❌ Failed to load AdminDashboard.fxml: " + e.getMessage());
+
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Navigation Error");
+            errorAlert.setHeaderText("Failed to Load Admin Dashboard");
+            errorAlert.setContentText("Error: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
+    }
+
     // ================= LOAD MAIN MENU =================
     private void loadMainMenu(ActionEvent event) {
         try {
-            // Close database connection before navigating
             if (database != null) {
                 database.close();
             }
@@ -256,7 +296,7 @@ public class LoginController implements Initializable {
             Parent mainMenuRoot = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(mainMenuRoot, 1200, 700);
+            Scene scene = new Scene(mainMenuRoot, 1400, 800);
             stage.setScene(scene);
             stage.setTitle("SchedMoTo - Dashboard");
             stage.setResizable(true);
@@ -267,8 +307,6 @@ public class LoginController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("❌ Failed to load Mainmenu.fxml: " + e.getMessage());
-
-            // Fallback to simple dashboard if main menu fails
             loadSimpleDashboard();
         }
     }
