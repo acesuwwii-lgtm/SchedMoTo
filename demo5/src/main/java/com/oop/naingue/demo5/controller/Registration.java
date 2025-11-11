@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-
 public class Registration implements Initializable {
 
     @FXML private TextField txtUsername;
@@ -41,15 +40,15 @@ public class Registration implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         initializeDatabase();
         setupErrorClearListeners();
-        System.out.println("✅ RegistrationController initialized successfully!");
+        System.out.println("RegistrationController initialized successfully!");
     }
 
     private void initializeDatabase() {
         try {
             databaseConnection = new DatabaseConnection();
-            System.out.println("✅ Database connection initialized successfully!");
+            System.out.println("Database connection initialized successfully!");
         } catch (Exception e) {
-            System.err.println("❌ Failed to initialize database connection: " + e.getMessage());
+            System.err.println("Failed to initialize database connection: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -82,7 +81,6 @@ public class Registration implements Initializable {
         String password = txtPassword.getText();
         String confirmPassword = txtConfirmPassword.getText();
 
-        // Validation
         if (username.isEmpty() || email.isEmpty() || address.isEmpty() ||
                 phone.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             showErrorMessage("Please fill in all required fields (marked with *)");
@@ -124,24 +122,21 @@ public class Registration implements Initializable {
             return;
         }
 
-        // Check if username exists
         if (databaseConnection.usernameExists(username)) {
             showErrorMessage("Username already exists. Please choose a different username.");
             return;
         }
 
-        // Check if email exists
         if (databaseConnection.emailExists(email)) {
             showErrorMessage("This email is already registered. Please login or use a different email.");
             return;
         }
 
-        // Register user
         UserData newUser = new UserData(username, email, phone, address, password);
         boolean registrationSuccess = databaseConnection.registerUser(newUser);
 
         if (registrationSuccess) {
-            System.out.println("✅ New user registered in database:");
+            System.out.println("New user registered in database:");
             System.out.println("  Username: " + username);
             System.out.println("  Email: " + email);
             System.out.println("  Address: " + address);
@@ -164,7 +159,6 @@ public class Registration implements Initializable {
     @FXML
     private void handleShowLogin(javafx.event.ActionEvent event) {
         try {
-
             if (databaseConnection != null) {
                 databaseConnection.close();
             }
@@ -180,11 +174,11 @@ public class Registration implements Initializable {
             stage.setTitle("Login - SchedMoTo");
             stage.show();
 
-            System.out.println("✅ Login view loaded successfully!");
+            System.out.println("Login view loaded successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Failed to load login-view.fxml: " + e.getMessage());
+            System.err.println("Failed to load login-view.fxml: " + e.getMessage());
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Navigation Error");
@@ -205,7 +199,7 @@ public class Registration implements Initializable {
 
     private void showErrorMessage(String message) {
         if (lblError != null) {
-            lblError.setText("❌ " + message);
+            lblError.setText(message);
             lblError.setVisible(true);
         }
         if (lblSuccess != null) {
@@ -215,7 +209,7 @@ public class Registration implements Initializable {
 
     private void showSuccessMessage(String message) {
         if (lblSuccess != null) {
-            lblSuccess.setText("✅ " + message);
+            lblSuccess.setText(message);
             lblSuccess.setVisible(true);
         }
         if (lblError != null) {
@@ -251,7 +245,7 @@ public class Registration implements Initializable {
     public void cleanup() {
         if (databaseConnection != null) {
             databaseConnection.close();
-            System.out.println("🔌 Database connection closed in cleanup");
+            System.out.println("Database connection closed in cleanup");
         }
     }
 }

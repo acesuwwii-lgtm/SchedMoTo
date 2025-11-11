@@ -13,11 +13,11 @@ public class Booking {
     private LocalDate checkOutDate;
     private String cmbMethod;
 
-    // No-argument constructor (required for your current approach)
+
     public Booking() {
     }
 
-    // All the setter methods
+
     public void setBookingId(String bookingId) { this.bookingId = bookingId; }
     public void setCustomerId(String customerId) { this.customerId = customerId; }
     public void setFullName(String fullName) { this.fullName = fullName; }
@@ -29,7 +29,7 @@ public class Booking {
     public void setCmbMethod(String paymentMethod) { this.cmbMethod = paymentMethod; }
 
 
-    // Getter methods (for BookingDAO)
+
     public String getBookingId() { return bookingId; }
     public String getCustomerId() { return customerId; }
     public String getFullName() { return fullName; }

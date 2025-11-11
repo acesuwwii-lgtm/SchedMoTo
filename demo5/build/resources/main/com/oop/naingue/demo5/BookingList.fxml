@@ -55,7 +55,7 @@
                         promptText="Select check-out date"/>
             <HBox spacing="15" alignment="CENTER_RIGHT"
                   GridPane.rowIndex="7" GridPane.columnIndex="1" style="-fx-padding:20 0 0 0;">
-                <Button text="Cancel" onAction="#onCancel"
+                <Button fx:id="btnCancel" text="Cancel" onAction="#onCancel"
                         style="-fx-background-color:#f44336; -fx-text-fill:white; -fx-font-weight:bold; -fx-padding:8 16;"/>
                 <Button text="Save Booking" onAction="#onSaveBooking"
                         style="-fx-background-color:#4CAF50; -fx-text-fill:white; -fx-font-weight:bold; -fx-padding:8 16;"/>

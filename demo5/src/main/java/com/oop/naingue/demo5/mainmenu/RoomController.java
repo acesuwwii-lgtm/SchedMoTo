@@ -32,17 +32,17 @@ public class RoomController {
     private void initialize() {
         roomDAO = new RoomDAO();
 
-        // Initialize table columns
+
         colRoomId.setCellValueFactory(new PropertyValueFactory<>("roomId"));
         colRoomNo.setCellValueFactory(new PropertyValueFactory<>("roomNo"));
         colType.setCellValueFactory(new PropertyValueFactory<>("roomType"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        // Load data
+
         loadRooms();
 
-        // Handle double-click to open booking
+
         roomTable.setOnMouseClicked(this::handleRoomClick);
     }
 
@@ -54,13 +54,13 @@ public class RoomController {
     }
 
     private void handleRoomClick(MouseEvent event) {
-        if (event.getClickCount() == 2) { // Double-click to book
+        if (event.getClickCount() == 2) {
             Room selected = roomTable.getSelectionModel().getSelectedItem();
             if (selected == null) return;
 
             String status = selected.getStatus();
 
-            // ✅ Block unavailable rooms
+
             if (!"Available".equalsIgnoreCase(status)) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Room Unavailable");
@@ -71,7 +71,7 @@ public class RoomController {
                 return;
             }
 
-            // Proceed to booking page
+
             openBookingList(selected);
         }
     }

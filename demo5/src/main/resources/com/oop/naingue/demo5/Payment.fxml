@@ -38,8 +38,6 @@
             <Label text="Payment Method:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
             <ComboBox fx:id="cmbMethod" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
         </GridPane>
-
-
         <HBox spacing="10" alignment="CENTER_RIGHT">
             <Button fx:id="confirmButton" text="Confirm Payment" onAction="#onConfirmPayment"
                     style="-fx-background-color: #198754; -fx-text-fill: white; -fx-padding: 6 14;"/>

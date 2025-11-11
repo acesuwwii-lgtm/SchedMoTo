@@ -33,7 +33,7 @@ public class RoomDAO {
                 ));
             }
         } catch (Exception e) {
-            System.err.println("❌ Error fetching rooms: " + e.getMessage());
+            System.err.println("Error fetching rooms: " + e.getMessage());
         }
 
         return rooms;

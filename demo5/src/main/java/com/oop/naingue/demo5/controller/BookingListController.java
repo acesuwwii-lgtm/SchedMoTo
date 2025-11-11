@@ -4,14 +4,13 @@ import com.oop.naingue.demo5.mainmenu.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public class BookingListController {
-
     @FXML
     private TextField txtFullName;
     @FXML
@@ -26,13 +25,14 @@ public class BookingListController {
     private TextField txtRoomId;
     @FXML
     private TextField txtRoomNo;
+    @FXML
+    private Button btnCancel;
 
     private Room selectedRoom;
     private final BookingDAO bookingDAO = new BookingDAO();
 
     @FXML
     public void initialize() {
-        // Automatically set checkout 1 day after check-in
         dpCheckIn.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && (dpCheckOut.getValue() == null || !dpCheckOut.getValue().isAfter(newVal))) {
                 dpCheckOut.setValue(newVal.plusDays(1));
@@ -62,60 +62,52 @@ public class BookingListController {
                     dpCheckIn.getValue() == null ||
                     dpCheckOut.getValue() == null ||
                     txtRoomType.getText().isEmpty()) {
-
-                showAlert(Alert.AlertType.WARNING, "⚠️ Please fill in all required fields before saving.");
+                showAlert(Alert.AlertType.WARNING, "Please fill in all required fields before saving.");
                 return;
             }
-
-            // Generate booking ID
             String bookingId = "BKG-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
-
             Booking booking = new Booking();
             booking.setBookingId(bookingId);
-
             if (CurrentUser.getInstance().isLoggedIn()) {
                 booking.setCustomerId(CurrentUser.getInstance().getCustomerId().toString());
             }
-
             booking.setFullName(txtFullName.getText());
             booking.setContactInfo(txtContactInfo.getText());
             booking.setRoomNo(selectedRoom != null ? selectedRoom.getRoomNumber() : "N/A");
             booking.setRoomType(txtRoomType.getText());
             booking.setCheckInDate(dpCheckIn.getValue());
             booking.setCheckOutDate(dpCheckOut.getValue());
-
-            // Save to DB
             bookingDAO.addBooking(booking);
-
-            showAlert(Alert.AlertType.INFORMATION,
-                    "✅ Booking successfully saved!\nBooking ID: " + bookingId);
-
-            // Load Payment.fxml and pass data
+            showAlert(Alert.AlertType.INFORMATION, "Booking successfully saved! Booking ID: " + bookingId);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/Payment.fxml"));
             Parent paymentRoot = loader.load();
-
             PaymentController paymentController = loader.getController();
             paymentController.setPaymentDetails(
                     bookingId,
                     txtRoomId.getText(),
                     selectedRoom != null ? selectedRoom.getPrice() : 0.0
             );
-
             Stage stage = (Stage) txtFullName.getScene().getWindow();
-            stage.setScene(new Scene(paymentRoot));
+            stage.getScene().setRoot(paymentRoot);
             stage.setTitle("Payment - SchedMoTo");
-            stage.show();
-
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "❌ Error saving booking: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error saving booking: " + e.getMessage());
         }
     }
 
     @FXML
     private void onCancel() {
-        Stage stage = (Stage) txtFullName.getScene().getWindow();
-        stage.close();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/Mainmenu.fxml"));
+            Parent mainMenuRoot = loader.load();
+            Stage stage = (Stage) txtFullName.getScene().getWindow();
+            stage.getScene().setRoot(mainMenuRoot);
+            stage.setTitle("Main Menu - SchedMoTo");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error loading Main Menu: " + e.getMessage());
+        }
     }
 
     private void showAlert(Alert.AlertType type, String message) {
@@ -124,12 +116,5 @@ public class BookingListController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void clearForm() {
-        txtFullName.clear();
-        txtContactInfo.clear();
-        dpCheckIn.setValue(null);
-        dpCheckOut.setValue(null);
     }
 }

@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    // LOGIN VIEW
     @FXML private VBox loginView;
     @FXML private TextField txtLoginUsername;
     @FXML private PasswordField txtLoginPassword;
@@ -43,7 +42,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("✅ LoginController initialized");
+        System.out.println("LoginController initialized");
         initializeDatabase();
         showLoginView();
     }
@@ -51,14 +50,13 @@ public class LoginController implements Initializable {
     private void initializeDatabase() {
         try {
             database = new DatabaseConnection();
-            System.out.println("✅ Database connection established");
+            System.out.println("Database connection established");
         } catch (Exception e) {
-            System.err.println("❌ Database connection failed: " + e.getMessage());
+            System.err.println("Database connection failed: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // ================= LOGIN =================
     @FXML
     private void handleLoginSubmit(ActionEvent event) {
         try {
@@ -79,13 +77,11 @@ public class LoginController implements Initializable {
                 return;
             }
 
-            // ✅ Check user type (customer or admin)
             UserData loggedInUser = database.loginUser(username, password);
 
             if (loggedInUser != null) {
-                System.out.println("✅ Login successful for: " + username);
+                System.out.println("Login successful for: " + username);
 
-                // Get user type from database
                 String userType = getUserType(username);
 
                 if ("admin".equalsIgnoreCase(userType)) {
@@ -105,12 +101,8 @@ public class LoginController implements Initializable {
         }
     }
 
-    /**
-     * Get user type from database
-     */
     private String getUserType(String username) {
         try {
-            // Use MongoClient to get the database directly
             com.mongodb.client.MongoClient mongoClient = com.mongodb.client.MongoClients.create(
                     "mongodb+srv://admin123:admin@cluster0.b0o4ard.mongodb.net/?appName=Cluster0"
             );
@@ -130,10 +122,9 @@ public class LoginController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "customer"; // default
+        return "customer";
     }
 
-    // ================= SIGN UP =================
     @FXML
     private void handleSignUpSubmit(ActionEvent event) {
         try {
@@ -199,7 +190,6 @@ public class LoginController implements Initializable {
         }
     }
 
-    // ================= VIEW SWITCHING =================
     @FXML
     private void handleShowSignUp(ActionEvent event) {
         try {
@@ -218,11 +208,11 @@ public class LoginController implements Initializable {
             stage.setTitle("Register - SchedMoTo");
             stage.show();
 
-            System.out.println("✅ Registration view loaded successfully!");
+            System.out.println("Registration view loaded successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Failed to load registration-view.fxml: " + e.getMessage());
+            System.err.println("Failed to load registration-view.fxml: " + e.getMessage());
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Navigation Error");
@@ -250,7 +240,6 @@ public class LoginController implements Initializable {
         }
     }
 
-    // ================= LOAD ADMIN DASHBOARD =================
     private void loadAdminDashboard(ActionEvent event) {
         try {
             if (database != null) {
@@ -269,11 +258,11 @@ public class LoginController implements Initializable {
             stage.setResizable(true);
             stage.show();
 
-            System.out.println("✅ Admin dashboard loaded successfully!");
+            System.out.println("Admin dashboard loaded successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Failed to load AdminDashboard.fxml: " + e.getMessage());
+            System.err.println("Failed to load AdminDashboard.fxml: " + e.getMessage());
 
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Navigation Error");
@@ -283,7 +272,6 @@ public class LoginController implements Initializable {
         }
     }
 
-    // ================= LOAD MAIN MENU =================
     private void loadMainMenu(ActionEvent event) {
         try {
             if (database != null) {
@@ -302,19 +290,18 @@ public class LoginController implements Initializable {
             stage.setResizable(true);
             stage.show();
 
-            System.out.println("✅ Main menu loaded successfully!");
+            System.out.println("Main menu loaded successfully!");
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("❌ Failed to load Mainmenu.fxml: " + e.getMessage());
+            System.err.println("Failed to load Mainmenu.fxml: " + e.getMessage());
             loadSimpleDashboard();
         }
     }
 
-    // ================= UTILITIES =================
     private void showError(Label label, String message) {
         if (label != null) {
-            label.setText("❌ " + message);
+            label.setText(message);
             label.setStyle("-fx-text-fill: #d32f2f; -fx-font-size: 12px;");
             label.setVisible(true);
         }
@@ -370,7 +357,7 @@ public class LoginController implements Initializable {
     public void cleanup() {
         if (database != null) {
             database.close();
-            System.out.println("🔌 Database connection closed");
+            System.out.println("Database connection closed");
         }
     }
 }
