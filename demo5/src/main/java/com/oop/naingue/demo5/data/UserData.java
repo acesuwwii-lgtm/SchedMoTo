@@ -23,11 +23,4 @@ public class UserData {
     public String getPhone() { return phone; }
     public String getAddress() { return address; }
     public String getPassword() { return password; }
-
-
-    public void setUsername(String username) { this.username = username; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPhone(String phone) { this.phone = phone; }
-    public void setAddress(String address) { this.address = address; }
-    public void setPassword(String password) { this.password = password; }
 }

@@ -17,7 +17,7 @@ public class Room {
         this.price = new SimpleDoubleProperty(price);
     }
 
-    // ✅ Getters used by your controller
+
     public String getRoomId() { return roomId.get(); }     // Matches controller call
     public String getRoomNo() { return roomNumber.get(); } // For txtRoomNo
     public String getRoomNumber() { return roomNumber.get(); }

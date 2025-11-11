@@ -21,7 +21,7 @@ import java.util.Optional;
 
 public class AdminController {
 
-    // Sidebar Buttons
+
     @FXML private Button btnDashboard;
     @FXML private Button btnManageRooms;
     @FXML private Button btnManageBookings;
@@ -30,7 +30,7 @@ public class AdminController {
     @FXML private Button btnReports;
     @FXML private Label lblAdminName;
 
-    // Views
+
     @FXML private VBox dashboardView;
     @FXML private VBox manageRoomsView;
     @FXML private VBox manageBookingsView;
@@ -38,7 +38,7 @@ public class AdminController {
     @FXML private VBox paymentsView;
     @FXML private VBox reportsView;
 
-    // Dashboard Stats
+
     @FXML private Label lblTotalRooms;
     @FXML private Label lblActiveBookings;
     @FXML private Label lblTotalUsers;
@@ -51,7 +51,7 @@ public class AdminController {
     @FXML private TableColumn<BookingData, String> colCheckOut;
     @FXML private TableColumn<BookingData, String> colStatus;
 
-    // Rooms Table
+
     @FXML private TableView<RoomData> tblRooms;
     @FXML private TableColumn<RoomData, String> colRoomId;
     @FXML private TableColumn<RoomData, String> colRoomNumber;
@@ -60,7 +60,7 @@ public class AdminController {
     @FXML private TableColumn<RoomData, Double> colRoomPrice;
     @FXML private TableColumn<RoomData, Void> colRoomActions;
 
-    // Bookings Table
+
     @FXML private ComboBox<String> cmbBookingFilter;
     @FXML private TableView<BookingData> tblBookings;
     @FXML private TableColumn<BookingData, String> colBookId;
@@ -71,7 +71,7 @@ public class AdminController {
     @FXML private TableColumn<BookingData, String> colBookStatus;
     @FXML private TableColumn<BookingData, Void> colBookActions;
 
-    // Users Table
+
     @FXML private TableView<UserData> tblUsers;
     @FXML private TableColumn<UserData, String> colUsername;
     @FXML private TableColumn<UserData, String> colEmail;
@@ -80,7 +80,7 @@ public class AdminController {
     @FXML private TableColumn<UserData, String> colUserType;
     @FXML private TableColumn<UserData, Void> colUserActions;
 
-    // Payments Table
+
     @FXML private TableView<PaymentData> tblPayments;
     @FXML private TableColumn<PaymentData, String> colPayBookingId;
     @FXML private TableColumn<PaymentData, String> colPayRoomNo;
@@ -90,7 +90,7 @@ public class AdminController {
     @FXML private TableColumn<PaymentData, String> colPayStatus;
     @FXML private TableColumn<PaymentData, String> colPayReceipt;
 
-    // Reports
+
     @FXML private TextArea txtReportArea;
 
     private MongoDatabase database;
@@ -111,7 +111,7 @@ public class AdminController {
     }
 
     private void setupTables() {
-        // Dashboard Recent Bookings
+
         colBookingId.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colRoomNo.setCellValueFactory(new PropertyValueFactory<>("roomNo"));
@@ -119,7 +119,7 @@ public class AdminController {
         colCheckOut.setCellValueFactory(new PropertyValueFactory<>("checkOut"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // Rooms Table
+
         colRoomId.setCellValueFactory(new PropertyValueFactory<>("roomId"));
         colRoomNumber.setCellValueFactory(new PropertyValueFactory<>("roomNumber"));
         colRoomType.setCellValueFactory(new PropertyValueFactory<>("roomType"));
@@ -147,7 +147,7 @@ public class AdminController {
             }
         });
 
-        // Bookings Table
+
         colBookId.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
         colBookCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colBookRoom.setCellValueFactory(new PropertyValueFactory<>("roomNo"));
@@ -184,7 +184,7 @@ public class AdminController {
             }
         });
 
-        // Users Table
+
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
@@ -206,7 +206,7 @@ public class AdminController {
             }
         });
 
-        // Payments Table
+
         colPayBookingId.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
         colPayRoomNo.setCellValueFactory(new PropertyValueFactory<>("roomNo"));
         colPayAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
@@ -216,7 +216,7 @@ public class AdminController {
         colPayReceipt.setCellValueFactory(new PropertyValueFactory<>("receiptNo"));
     }
 
-    // Navigation Methods
+
     @FXML
     private void showDashboard() {
         hideAllViews();
@@ -267,26 +267,26 @@ public class AdminController {
         reportsView.setVisible(false);
     }
 
-    // Load Data Methods
+
     private void loadDashboardStats() {
         try {
-            // Count rooms
+
             long totalRooms = database.getCollection("rooms").countDocuments();
             lblTotalRooms.setText(String.valueOf(totalRooms));
 
-            // Count active bookings
+
             long activeBookings = database.getCollection("bookings")
                     .countDocuments(new Document("status", "Confirmed"));
             lblActiveBookings.setText(String.valueOf(activeBookings));
 
-            // Count users
+
             long totalUsers = database.getCollection("users").countDocuments();
             lblTotalUsers.setText(String.valueOf(totalUsers));
 
-            // Calculate revenue (placeholder - implement based on your payment structure)
+
             lblTotalRevenue.setText("₱0.00");
 
-            // Load recent bookings
+
             loadRecentBookings();
         } catch (Exception e) {
             e.printStackTrace();
@@ -379,12 +379,12 @@ public class AdminController {
     }
 
     private void loadPayments() {
-        // Implement payment loading based on your database structure
+
         ObservableList<PaymentData> payments = FXCollections.observableArrayList();
         tblPayments.setItems(payments);
     }
 
-    // Action Methods
+
     @FXML
     private void handleAddRoom() {
         Dialog<RoomData> dialog = new Dialog<>();
@@ -439,7 +439,7 @@ public class AdminController {
     }
 
     private void editRoom(RoomData room) {
-        // Implement room editing
+
         showAlert("Info", "Edit room: " + room.getRoomNumber());
     }
 
@@ -576,9 +576,6 @@ public class AdminController {
 
         public String getRoomId() { return roomId; }
         public String getRoomNumber() { return roomNumber; }
-        public String getRoomType() { return roomType; }
-        public String getStatus() { return status; }
-        public double getPrice() { return price; }
     }
 
     public static class BookingData {
@@ -595,10 +592,6 @@ public class AdminController {
         }
 
         public String getBookingId() { return bookingId; }
-        public String getCustomerName() { return customerName; }
-        public String getRoomNo() { return roomNo; }
-        public String getCheckIn() { return checkIn; }
-        public String getCheckOut() { return checkOut; }
         public String getStatus() { return status; }
     }
 
@@ -614,10 +607,6 @@ public class AdminController {
         }
 
         public String getUsername() { return username; }
-        public String getEmail() { return email; }
-        public String getPhone() { return phone; }
-        public String getAddress() { return address; }
-        public String getUserType() { return userType; }
     }
 
     public static class PaymentData {
@@ -634,13 +623,5 @@ public class AdminController {
             this.status = status;
             this.receiptNo = receiptNo;
         }
-
-        public String getBookingId() { return bookingId; }
-        public String getRoomNo() { return roomNo; }
-        public double getAmount() { return amount; }
-        public String getMethod() { return method; }
-        public String getDate() { return date; }
-        public String getStatus() { return status; }
-        public String getReceiptNo() { return receiptNo; }
     }
 }
