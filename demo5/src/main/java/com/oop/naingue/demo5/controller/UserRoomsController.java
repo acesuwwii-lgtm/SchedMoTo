@@ -5,17 +5,12 @@ import com.oop.naingue.demo5.repositories.RoomsRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
-
 public class UserRoomsController extends BaseController {
 
-    @FXML
-    private VBox roomsListContent;
+    @FXML private VBox roomsListContent;
 
     private final RoomsRepository roomsRepository = new RoomsRepository();
 
@@ -33,7 +28,6 @@ public class UserRoomsController extends BaseController {
         card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;" +
                 " -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);");
 
-        // Room details
         VBox details = new VBox();
         details.setSpacing(5);
 
@@ -51,30 +45,22 @@ public class UserRoomsController extends BaseController {
         String roomStatus = room.getStatus().trim().toLowerCase();
         if (roomStatus.equals("booked") || roomStatus.equals("under-maintenance")) {
             bookBtn.setDisable(true);
-            bookBtn.setText("Unavailable");
-            bookBtn.setStyle("-fx-background-color: #d1d5db; -fx-text-fill: #6b7280; -fx-font-weight: bold;" +
-                    " -fx-padding: 6 12; -fx-background-radius: 8; -fx-cursor: default;");
-        } else {
-            bookBtn.setOnAction(event -> openBooking(room));
         }
 
+        bookBtn.setOnAction(event -> openBooking(room));
         details.getChildren().addAll(roomNumber, roomType, roomPrice, roomCapacity, status, bookBtn);
-
         card.getChildren().add(details);
         return card;
     }
 
-
     private void openBooking(Rooms room) {
-        // Switch to booking scene
         app.switchScene("user-booking");
-
-        // Autofill booking form
         UserBookingsController bookingController = (UserBookingsController) app.getController("user-booking");
         if (bookingController != null) {
             bookingController.setRoomForBooking(room);
         }
     }
+
 
     @FXML
     private void onLogoutSubmit() {
@@ -83,21 +69,24 @@ public class UserRoomsController extends BaseController {
 
     @FXML
     private void onRoomSubmit() {
-        // stay on this scene
+        app.switchScene("user-booking-list");
     }
 
     @FXML
-    private void onBookingSubmit() {
+    private void onBookingSubmit( ) {
         app.switchScene("user-booking");
     }
 
     @FXML
     private void onBookListSubmit() {
-        // already here
+        //already here
     }
 
     @FXML
     private void onPaymentSubmit() {
         app.switchScene("user-payment");
     }
+
 }
+
+
