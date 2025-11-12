@@ -12,6 +12,7 @@ module com.oop.naingue.demo {
     requires java.desktop;
     requires jbcrypt;
     requires javafx.base;
+    requires java.sql;
 
     opens com.oop.naingue.demo5 to javafx.fxml;
     exports com.oop.naingue.demo5;
