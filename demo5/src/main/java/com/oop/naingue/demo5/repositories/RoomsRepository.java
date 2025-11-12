@@ -14,7 +14,7 @@ public class RoomsRepository extends BaseRepository<Rooms> {
 
     public RoomsRepository() {
         super();
-        initCollection("com/oop/naingue/demo5/images/rooms"); // MongoDB collection name
+        initCollection("rooms"); // Correct MongoDB collection name
     }
 
     @Override

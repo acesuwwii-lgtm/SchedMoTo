@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oop.naingue.demo5.controller.UserRoomsController">
+
+    <!-- HEADER -->
+    <top>
+        <VBox spacing="0">
+            <HBox alignment="CENTER" prefHeight="80" spacing="20" style="-fx-background-color: linear-gradient(to right, #1e3a8a, #3b82f6);                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Region prefHeight="45" prefWidth="45" />
+                    <VBox spacing="2">
+                        <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="SchedMoTo" />
+                        <Label style="-fx-text-fill: #dbeafe; -fx-font-size: 12px;" text="Hotel Management System" />
+                    </VBox>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="logoutBtn" onAction="#onLogoutSubmit" style="-fx-background-color: rgba(255, 255, 255, 0.2);                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 10 20;                                -fx-background-radius: 8;                                -fx-border-color: white;                                -fx-border-width: 1.5;                                -fx-border-radius: 8;                                -fx-cursor: hand;                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);" text="Logout" />
+                <padding>
+                    <Insets left="30" right="30" />
+                </padding>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 15 30;                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);">
+                <Label style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" text="Rooms" />
+                <Region HBox.hgrow="ALWAYS" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- SIDEBAR -->
+    <left>
+        <VBox alignment="TOP_CENTER" spacing="12" style="-fx-padding: 30 20;                      -fx-background-color: white;                      -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 2, 0);                      -fx-border-color: #f1f5f9;                      -fx-border-width: 0 1 0 0;">
+            <VBox alignment="CENTER" spacing="8">
+                <Button fx:id="roomsBtn" onAction="#onRoomSubmit" prefWidth="180" style="-fx-background-color: #007bff; -fx-text-fill: white;                                -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25;                                -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0, 123, 255, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Rooms" />
+                <Button fx:id="bookingBtn" onAction="#onBookingSubmit" prefWidth="180" style="-fx-background-color: #059669; -fx-text-fill: white;                                -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25;                                -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Booking" />
+            <Button fx:id="bookingBtn1" onAction="#onBookListSubmit" prefWidth="180" style="-fx-background-color: #059669; -fx-text-fill: white;                                -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25;                                -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Booking List" />
+                <Button fx:id="paymentBtn" onAction="#onPaymentSubmit" prefWidth="180" style="-fx-background-color: #d97706; -fx-text-fill: white;                                -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25;                                -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Payment" />
+                <Region minHeight="50" VBox.vgrow="ALWAYS" />
+                <padding>
+                    <Insets bottom="20" />
+                </padding>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: transparent; -fx-padding: 30;">
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED">
+                <VBox fx:id="roomsListContent" fillWidth="true" spacing="20">
+                    <padding>
+                        <Insets bottom="20" left="20" right="20" top="20" />
+                    </padding>
+                    <!-- Room cards will be dynamically added here -->
+                    <Label style="-fx-text-fill: #6b7280; -fx-font-size: 16px;" text="Room listings will appear here." />
+                </VBox>
+            </ScrollPane>
+        </StackPane>
+    </center>
+</BorderPane>
