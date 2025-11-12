@@ -72,26 +72,12 @@ public class PaymentController extends BaseController {
         }
 
         // Show receipt
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/fxml/Receipt.fxml"));
-            AnchorPane receiptPane = loader.load();
-            Object controller = loader.getController();
-            if (controller instanceof ReceiptController receiptController) {
-                receiptController.setPaymentDetails(
-                        txtBookingId.getText(),
-                        txtAmount.getText(),
-                        dpPaymentDate.getValue(),
-                        cmbMethod.getValue(),
-                        cmbStatus.getValue()
-                );
-            }
-            Stage stage = new Stage();
-            stage.setTitle("Receipt");
-            stage.setScene(new Scene(receiptPane));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        Object controller = app.getController("receipt");
+        if (controller instanceof ReceiptController receiptController) {
+            receiptController.setBookingId(bookingId); // Pass booking ID to receipt
         }
+        app.switchScene("receipt");
+
     }
 
     @FXML
