@@ -15,14 +15,14 @@ public class BookingRepository extends BaseRepository<Booking> {
 
     public BookingRepository() {
         super();
-        initCollection("bookings"); // MongoDB collection name
+        initCollection("bookings");
     }
 
     @Override
     protected Booking convert(Document document) {
         Booking booking = new Booking();
         booking.setId(document.getObjectId("_id"));
-        booking.setBookingId(document.getInteger("bookingId"));
+        booking.setBookingId(document.getInteger("bookingId", 0));
         booking.setUserId(document.getObjectId("userId"));
         booking.setRoomId(document.getInteger("roomId"));
         booking.setCheckedInAt(document.getDate("checkedInAt"));
@@ -33,7 +33,7 @@ public class BookingRepository extends BaseRepository<Booking> {
             try {
                 booking.setBookingStatus(Booking.BookingStatus.valueOf(statusStr));
             } catch (IllegalArgumentException e) {
-                booking.setBookingStatus(null); // fallback if invalid
+                booking.setBookingStatus(null);
             }
         }
 
@@ -49,6 +49,11 @@ public class BookingRepository extends BaseRepository<Booking> {
     public Booking findByBookingId(int bookingId) {
         Document document = this.collection.find(eq("bookingId", bookingId)).first();
         return document == null ? null : convert(document);
+    }
+
+    public Booking findById(String id) {
+        Document doc = collection.find(eq("_id", new ObjectId(id))).first();
+        return doc != null ? convert(doc) : null;
     }
 
     public List<Booking> findAll() {
@@ -75,24 +80,25 @@ public class BookingRepository extends BaseRepository<Booking> {
         return bookings;
     }
 
-    public void insert(Booking booking) {
-        this.collection.insertOne(booking.toDocument());
+    // --- Generate next bookingId ---
+    private int getNextBookingId() {
+        Document lastBooking = collection.find()
+                .sort(new Document("bookingId", -1))
+                .first();
+        if (lastBooking == null) return 1;
+        return lastBooking.getInteger("bookingId", 0) + 1;
     }
 
-    public void update(int bookingId, Booking booking) {
-        Document updated = new Document()
-                .append("userId", booking.getUserId())
-                .append("roomId", booking.getRoomId())
-                .append("checkedInAt", booking.getCheckedInAt())
-                .append("checkedOutAt", booking.getCheckedOutAt())
-                .append("bookingStatus", booking.getBookingStatus() != null ? booking.getBookingStatus().name() : null)
-                .append("paymentId", booking.getPaymentId())
-                .append("fullName", booking.getFullName())
-                .append("contactInfo", booking.getContactInfo())
-                .append("roomNumber", booking.getRoomNumber())
-                .append("roomType", booking.getRoomType());
+    public void insert(Booking booking) {
+        booking.setBookingId(getNextBookingId());
+        Document doc = booking.toDocument();
+        collection.insertOne(doc);
+        booking.setId(doc.getObjectId("_id"));
+    }
 
-        this.collection.updateOne(eq("bookingId", bookingId), new Document("$set", updated));
+    public void update(ObjectId id, Booking booking) {
+        Document updated = booking.toDocument();
+        this.collection.replaceOne(eq("_id", id), updated);
     }
 
     public void deleteByBookingId(int bookingId) {

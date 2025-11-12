@@ -1,49 +1,80 @@
 package com.oop.naingue.demo5.controller;
 
-import com.oop.naingue.demo5.controller.BaseController;
+import com.oop.naingue.demo5.models.Booking;
+import com.oop.naingue.demo5.models.Rooms;
+import com.oop.naingue.demo5.repositories.BookingRepository;
+import com.oop.naingue.demo5.repositories.RoomsRepository;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class PaymentController extends BaseController {
 
-    @FXML
-    private TextField txtBookingId;
+    @FXML private TextField txtBookingId;
+    @FXML private TextField txtAmount;
+    @FXML private DatePicker dpPaymentDate;
+    @FXML private ComboBox<String> cmbMethod;
+    @FXML private ComboBox<String> cmbStatus;
 
-    @FXML
-    private TextField txtAmount;
+    private int bookingId; // store as int internally
 
-    @FXML
-    private DatePicker dpPaymentDate;
+    private final BookingRepository bookingRepository = new BookingRepository();
+    private final RoomsRepository roomsRepository = new RoomsRepository();
 
-    @FXML
-    private ComboBox<String> cmbMethod;
+    // This is now called from UserBookingsController before switching scene
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
 
-    @FXML
-    private ComboBox<String> cmbStatus;
+        // Populate fields if FXML is already loaded
+        if (txtBookingId != null) {
+            txtBookingId.setText(String.valueOf(bookingId));
+            populateRoomAndAmount();
+        }
+    }
+
+    // Load booking and room details to populate amount and booking info
+    private void populateRoomAndAmount() {
+        Booking booking = bookingRepository.findByBookingId(bookingId);
+        if (booking != null) {
+            txtBookingId.setText(String.valueOf(booking.getBookingId()));
+
+            Rooms room = roomsRepository.findByRoomId(booking.getRoomId());
+            if (room != null) {
+                txtAmount.setText(String.valueOf(room.getRoomPrice()));
+            }
+
+            dpPaymentDate.setValue(java.time.LocalDate.now());
+            cmbMethod.getSelectionModel().selectFirst();
+            cmbStatus.getSelectionModel().select("Pending");
+        }
+    }
 
     @FXML
     private void onConfirmPayment() {
-        System.out.println("Confirm Payment clicked!");
-        System.out.println("Booking ID: " + txtBookingId.getText());
-        System.out.println("Amount: " + txtAmount.getText());
-        System.out.println("Payment Date: " + dpPaymentDate.getValue());
-        System.out.println("Payment Method: " + cmbMethod.getValue());
-        System.out.println("Payment Status: " + cmbStatus.getValue());
+        Booking booking = bookingRepository.findByBookingId(bookingId);
+        if (booking == null) return;
 
-        // Load receipt scene
+        // Update booking and room status
+        booking.setBookingStatus(Booking.BookingStatus.PAID);
+        bookingRepository.update(booking.getId(), booking);
+
+        Rooms room = roomsRepository.findByRoomId(booking.getRoomId());
+        if (room != null) {
+            room.setStatus("Booked");
+            roomsRepository.update(room.getRoomId(), room);
+        }
+
+        // Show receipt
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/oop/naingue/demo5/fxml/Receipt.fxml"));
             AnchorPane receiptPane = loader.load();
-
-            // Pass payment details to ReceiptController
             Object controller = loader.getController();
             if (controller instanceof ReceiptController receiptController) {
                 receiptController.setPaymentDetails(
@@ -54,12 +85,10 @@ public class PaymentController extends BaseController {
                         cmbStatus.getValue()
                 );
             }
-
             Stage stage = new Stage();
             stage.setTitle("Receipt");
             stage.setScene(new Scene(receiptPane));
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,23 +96,17 @@ public class PaymentController extends BaseController {
 
     @FXML
     private void onCancel() {
-        System.out.println("Cancel clicked!");
         txtBookingId.clear();
         txtAmount.clear();
         dpPaymentDate.setValue(null);
         cmbMethod.getSelectionModel().clearSelection();
         cmbStatus.getSelectionModel().clearSelection();
+        app.switchScene("user-menu");
     }
 
     @FXML
     public void initialize() {
-        // Populate combo boxes with dummy data
         cmbMethod.getItems().addAll("Credit Card", "Debit Card", "Cash", "Online");
         cmbStatus.getItems().addAll("Pending", "Completed", "Failed");
-    }
-
-    @Override
-    public void onSceneShown() {
-        System.out.println("Payment scene is now shown.");
     }
 }

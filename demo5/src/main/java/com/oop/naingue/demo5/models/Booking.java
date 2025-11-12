@@ -24,7 +24,10 @@ public class Booking extends BaseModel {
 
     // Enum for booking status
     public enum BookingStatus {
-        PENDING, CONFIRMED, CANCELLED
+        PENDING,
+        CONFIRMED,
+        CANCELLED,
+        PAID // Add this to indicate payment completed
     }
 
     // Getters and Setters
