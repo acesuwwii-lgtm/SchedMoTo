@@ -1,4 +1,4 @@
-module com.oop.naingue.demo5 {
+module com.oop.naingue.demo {
     requires javafx.controls;
     requires javafx.fxml;
 
@@ -10,13 +10,13 @@ module com.oop.naingue.demo5 {
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
     requires java.desktop;
+    requires jbcrypt;
+    requires javafx.base;
 
     opens com.oop.naingue.demo5 to javafx.fxml;
     exports com.oop.naingue.demo5;
     exports com.oop.naingue.demo5.controller;
     opens com.oop.naingue.demo5.controller to javafx.fxml;
-    exports com.oop.naingue.demo5.application;
-    opens com.oop.naingue.demo5.application to javafx.fxml;
-    exports com.oop.naingue.demo5.data;
-    opens com.oop.naingue.demo5.data to javafx.fxml;
+    exports com.oop.naingue.demo5.models;
+    opens com.oop.naingue.demo5.models to javafx.fxml;
 }

@@ -27,7 +27,7 @@ tasks.withType<JavaCompile> {
 
 application {
     mainModule.set("com.oop.naingue.demo5")
-    mainClass.set("com.oop.naingue.demo5.application.loginApplicaion")
+    mainClass.set("com.oop.naingue.demo5.SchedMoToLauncher")
 }
 
 javafx {
@@ -51,6 +51,9 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.11.1")
     implementation("org.openjfx:javafx-controls:17.0.2")
     implementation("org.openjfx:javafx-fxml:17.0.2")
+    implementation("net.synedra:validatorfx:0.6.1")
+    implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.slf4j:slf4j-simple:2.0.12")
 }
 
 tasks.withType<Test> {

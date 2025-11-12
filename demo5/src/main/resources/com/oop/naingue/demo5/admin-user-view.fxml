@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oop.naingue.demo5.controller.AdminUserController">
+
+    <top>
+        <VBox spacing="0">
+            <HBox alignment="CENTER" prefHeight="80" spacing="20" style="-fx-background-color: linear-gradient(to right, #1e3a8a, #3b82f6);                          -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <ImageView fitHeight="48.0" fitWidth="48.0" preserveRatio="true">
+                        <Image url="@/com/oop/naingue/demo5/images/logoWbg.png" />
+                    </ImageView>
+                    <VBox spacing="2">
+                        <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;" text="SchedMoTo" />
+                        <Label style="-fx-text-fill: #dbeafe; -fx-font-size: 12px;" text="Hotel Management System" />
+                    </VBox>
+                </HBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnLogout" onAction="#onLogoutSubmit" style="-fx-background-color: rgba(255, 255, 255, 0.2);                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 10 20;                                -fx-background-radius: 8;                                -fx-border-color: white;                                -fx-border-width: 1.5;                                -fx-border-radius: 8;                                -fx-cursor: hand;                                -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);" text="Logout">
+                </Button>
+                <padding>
+                    <Insets left="30" right="30" />
+                </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 15 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);">
+                <Label style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" text="Admin Dashboard" />
+                <Region HBox.hgrow="ALWAYS" />
+            </HBox>
+        </VBox>
+    </top>
+    <left>
+        <VBox alignment="TOP_CENTER" spacing="12" style="-fx-padding: 30 20;                      -fx-background-color: white;                      -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 2, 0);                      -fx-border-color: #f1f5f9;                      -fx-border-width: 0 1 0 0;">
+            <VBox alignment="CENTER" spacing="8">
+                <Button fx:id="userBtn" onAction="#onUserSubmit" prefWidth="180" style="-fx-background-color: #007bff;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(0, 123, 255, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Users" />
+                <Button fx:id="bookBtn" onAction="#onBookingSubmit" prefWidth="180" style="-fx-background-color: #059669;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Bookings" />
+                <Button fx:id="roomBtn" onAction="#onRoomSubmit" prefWidth="180" style="-fx-background-color: #d97706;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Rooms" />
+            <Button fx:id="paymentBtn" onAction="#onPaymentSubmit" prefWidth="180" style="-fx-background-color: FF5656; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2); -fx-cursor: hand;" text="Payments" />
+
+                <padding>
+                    <Insets bottom="20" />
+                </padding>
+            </VBox>
+        </VBox>
+    </left>
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: transparent; -fx-padding: 30;">
+            <VBox fx:id="welcomeContent" alignment="CENTER" spacing="25" visible="true">
+            <children>
+               <Label style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" text="USER MANAGEMENT TABLE">
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+               </Label>
+               <TableView fx:id="usersTable" prefHeight="483.0" prefWidth="1119.0">
+                 <columns>
+                   <TableColumn fx:id="userNameCol" prefWidth="212.2666801214218" text="Username" />
+                   <TableColumn fx:id="emailCol" minWidth="0.0" prefWidth="177.3332977294922" text="Email" />
+                     <TableColumn fx:id="phoneCol" minWidth="0.0" prefWidth="240.53329467773438" text="Phone" />
+                     <TableColumn fx:id="addCol" minWidth="0.0" prefWidth="260.800048828125" text="Address" />
+                     <TableColumn fx:id="passCol" prefWidth="225.5999633789063" text="Password" />
+                 </columns>
+               </TableView>
+               <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: EEEEEE; -fx-background-radius: 20;">
+                  <children>
+                     <TextField fx:id="userNameField" promptText="Username">
+                        <HBox.margin>
+                           <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <TextField fx:id="emailField" layoutX="20.0" layoutY="30.0" promptText="Email">
+                        <HBox.margin>
+                           <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <TextField fx:id="phoneField" promptText="Phone">
+                        <HBox.margin>
+                           <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <TextField fx:id="addressField" promptText="Address">
+                        <HBox.margin>
+                           <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <TextField fx:id="passwordField" promptText="Password">
+                        <HBox.margin>
+                           <Insets left="10.0" top="20.0" />
+                        </HBox.margin>
+                     </TextField>
+                     <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="66.0" prefWidth="475.0">
+                       <buttons>
+                         <Button fx:id="addBtn" mnemonicParsing="false" onAction="#onAddSubmit" text="Add" />
+                           <Button fx:id="editBtn" mnemonicParsing="false" onAction="#onEditSubmit" text="Edit" />
+                           <Button fx:id="delBtn" mnemonicParsing="false" onAction="#onDelSubmit" text="Delete" />
+                       </buttons>
+                        <HBox.margin>
+                           <Insets left="-30.0" right="20.0" />
+                        </HBox.margin>
+                     </ButtonBar>
+                  </children>
+               </HBox>
+            </children>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>
