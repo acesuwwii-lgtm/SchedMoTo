@@ -18,4 +18,10 @@ public class InsertRoomTest {
 
         System.out.println("Room inserted successfully!");
     }
+
+//    kung ma merge na ni ninyo sa inyo, egamit ra ni tapos e run para maka insert mo
+//    e merge sa inyong branches
+//    makita na sa inyong database
+//    ok na ni, ayaw na prompt balik, kani na gamita, pag update na diya ug merge sa imong branch para magamit
+//    3 min break muna ko
 }

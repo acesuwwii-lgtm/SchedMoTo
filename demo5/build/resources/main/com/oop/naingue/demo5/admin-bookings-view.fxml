@@ -3,16 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 
 <BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oop.naingue.demo5.controller.AdminBookingsController">
 
@@ -29,9 +29,9 @@
                     </VBox>
                 </HBox>
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="btnLogout" onAction="#onLogoutSubmit" style="-fx-background-color: rgba(255, 255, 255, 0.2); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-border-color: white; -fx-border-width: 1.5; -fx-border-radius: 8; -fx-cursor: hand;" text="Logout"/>
+                <Button fx:id="btnLogout" onAction="#onLogoutSubmit" style="-fx-background-color: rgba(255, 255, 255, 0.2); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-border-color: white; -fx-border-width: 1.5; -fx-border-radius: 8; -fx-cursor: hand;" text="Logout" />
                 <padding>
-                    <Insets left="30" right="30"/>
+                    <Insets left="30" right="30" />
                 </padding>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="30" style="-fx-background-color: white; -fx-padding: 15 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);">
@@ -47,7 +47,7 @@
                 <Button fx:id="userBtn" onAction="#onUserSubmit" prefWidth="180" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0, 123, 255, 0.3), 8, 0, 0, 2); -fx-cursor: hand;" text="Users" />
                 <Button fx:id="bookBtn" onAction="#onBookingSubmit" prefWidth="180" style="-fx-background-color: #059669; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2); -fx-cursor: hand;" text="Bookings" />
                 <Button fx:id="roomBtn" onAction="#onRoomSubmit" prefWidth="180" style="-fx-background-color: #d97706; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2); -fx-cursor: hand;" text="Rooms" />
-                <Button fx:id="paymentBtn" onAction="#onPaymentSubmit" prefWidth="180" style="-fx-background-color: FF5656; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2); -fx-cursor: hand;" text="Payments" />
+                <Button fx:id="paymentBtn" onAction="#onPaymentSubmit" prefWidth="180" style="-fx-background-color: #FF5656; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2); -fx-cursor: hand;" text="Payments" />
                 <padding>
                     <Insets bottom="20" />
                 </padding>
@@ -59,17 +59,23 @@
         <StackPane fx:id="contentArea" style="-fx-background-color: transparent; -fx-padding: 30;">
             <VBox fx:id="bookingContent" alignment="CENTER" spacing="25" visible="true">
                 <Label style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" text="BOOKINGS TABLE" />
-                <TableView fx:id="bookingsTable" prefHeight="500" prefWidth="1100">
-                    <columns>
-                        <TableColumn fx:id="bookingIdCol" text="Booking ID" prefWidth="100"/>
-                        <TableColumn fx:id="userIdCol" text="User ID" prefWidth="150"/>
-                        <TableColumn fx:id="roomIdCol" text="Room ID" prefWidth="100"/>
-                        <TableColumn fx:id="checkInCol" text="Check-In Date" prefWidth="200"/>
-                        <TableColumn fx:id="checkOutCol" text="Check-Out Date" prefWidth="200"/>
-                        <TableColumn fx:id="statusCol" text="Status" prefWidth="150"/>
-                        <TableColumn fx:id="paymentCol" text="Payment ID" prefWidth="100"/>
-                    </columns>
-                </TableView>
+
+                <ScrollPane fitToWidth="false" fitToHeight="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" maxWidth="Infinity">
+                    <TableView fx:id="bookingsTable" prefHeight="500" prefWidth="1100">
+                        <columns>
+                            <TableColumn fx:id="bookingIdCol" prefWidth="100" text="Booking ID" />
+                            <TableColumn fx:id="userIdCol" prefWidth="150" text="User ID" />
+                            <TableColumn fx:id="roomIdCol" prefWidth="100" text="Room ID" />
+                            <TableColumn fx:id="fullNameCol" prefWidth="200" text="Full Name" />
+                            <TableColumn fx:id="contactInfoCol" prefWidth="200" text="Contact Info" />
+                            <TableColumn fx:id="roomTypeCol" prefWidth="180" text="Room Type" />
+                            <TableColumn fx:id="checkInCol" prefWidth="200" text="Check-In Date" />
+                            <TableColumn fx:id="checkOutCol" prefWidth="200" text="Check-Out Date" />
+                            <TableColumn fx:id="bookingStatusCol" prefWidth="150" text="Status" />
+                            <TableColumn fx:id="paymentCol" prefWidth="180" text="Payment ID" />
+                        </columns>
+                    </TableView>
+                </ScrollPane>
             </VBox>
         </StackPane>
     </center>

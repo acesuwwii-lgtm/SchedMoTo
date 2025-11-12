@@ -28,7 +28,9 @@ public class SchedMoToApplication extends Application {
         preloadScene("admin-menu", "admin-menu-view.fxml");
         preloadScene("user-menu", "main-menu-view.fxml");
         preloadScene("admin-user", "admin-user-view.fxml");
-        preloadScene("booking", "admin-bookings-view.fxml");
+        preloadScene("admin-booking", "admin-bookings-view.fxml");
+        preloadScene("admin-rooms", "admin-rooms-view.fxml");
+        preloadScene("user-booking", "user-booking-view.fxml");
         preloadScene("payment-menu", "payment-view.fxml");
         preloadScene("receipt", "receipt-view.fxml");
 

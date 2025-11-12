@@ -2,9 +2,7 @@ package com.oop.naingue.demo5.controller;
 
 import com.oop.naingue.demo5.models.Booking;
 import com.oop.naingue.demo5.repositories.BookingRepository;
-import com.oop.naingue.demo5.utils.UserRefreshService;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,21 +27,53 @@ public class AdminBookingsController extends BaseController {
     @FXML
     private TableColumn<Booking, Integer> paymentCol;
     @FXML
-    private TableColumn<Booking, Object> userIdCol; // Keep as Object or String for display
+    private TableColumn<Booking, String> userIdCol;
+    @FXML
+    private TableColumn<Booking, String> fullNameCol;
+    @FXML
+    private TableColumn<Booking, String> contactInfoCol;
+    @FXML
+    private TableColumn<Booking, String> roomTypeCol;
+    @FXML
+    private TableColumn<Booking, String> checkInCol;
+    @FXML
+    private TableColumn<Booking, String> checkOutCol;
 
     private BookingRepository bookingRepository;
     private final ObservableList<Booking> bookingsList = FXCollections.observableArrayList();
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @FXML
     public void initialize() {
         bookingRepository = new BookingRepository();
 
-        // Bind columns
+        // Bind table columns
         bookingIdCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getBookingId()).asObject());
+        userIdCol.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getUserId() != null ? c.getValue().getUserId().toHexString() : "N/A"));
         roomIdCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getRoomId()).asObject());
         paymentCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getPaymentId()).asObject());
-        bookingStatusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getBookingStatus()));
-        userIdCol.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getUserId()));
+        bookingStatusCol.setCellValueFactory(c ->
+                new SimpleStringProperty(
+                        c.getValue().getBookingStatus() != null
+                                ? c.getValue().getBookingStatus().name().charAt(0)
+                                + c.getValue().getBookingStatus().name().substring(1).toLowerCase()
+                                : "N/A"
+                )
+        );
+
+        // Additional columns (mocked or joined data depending on your model)
+        fullNameCol.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getFullName() != null ? c.getValue().getFullName() : "N/A"));
+        contactInfoCol.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getContactInfo() != null ? c.getValue().getContactInfo() : "N/A"));
+        roomTypeCol.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getRoomType() != null ? c.getValue().getRoomType() : "N/A"));
+
+        checkInCol.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getCheckedInAt() != null ? dateFormat.format(c.getValue().getCheckedInAt()) : "N/A"));
+        checkOutCol.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getCheckedOutAt() != null ? dateFormat.format(c.getValue().getCheckedOutAt()) : "N/A"));
 
         bookingsTable.setItems(bookingsList);
 

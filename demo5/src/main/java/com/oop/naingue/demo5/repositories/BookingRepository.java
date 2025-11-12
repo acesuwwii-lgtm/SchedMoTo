@@ -15,7 +15,7 @@ public class BookingRepository extends BaseRepository<Booking> {
 
     public BookingRepository() {
         super();
-        initCollection("bookings"); // name of the collection in MongoDB
+        initCollection("bookings"); // MongoDB collection name
     }
 
     @Override
@@ -27,8 +27,22 @@ public class BookingRepository extends BaseRepository<Booking> {
         booking.setRoomId(document.getInteger("roomId"));
         booking.setCheckedInAt(document.getDate("checkedInAt"));
         booking.setCheckedOutAt(document.getDate("checkedOutAt"));
-        booking.setBookingStatus(document.getString("bookingStatus"));
-        booking.setPaymentId(document.getInteger("paymentId"));
+
+        String statusStr = document.getString("bookingStatus");
+        if (statusStr != null) {
+            try {
+                booking.setBookingStatus(Booking.BookingStatus.valueOf(statusStr));
+            } catch (IllegalArgumentException e) {
+                booking.setBookingStatus(null); // fallback if invalid
+            }
+        }
+
+        booking.setPaymentId(document.getInteger("paymentId", 0));
+        booking.setFullName(document.getString("fullName"));
+        booking.setContactInfo(document.getString("contactInfo"));
+        booking.setRoomNumber(document.getString("roomNumber"));
+        booking.setRoomType(document.getString("roomType"));
+
         return booking;
     }
 
@@ -71,8 +85,12 @@ public class BookingRepository extends BaseRepository<Booking> {
                 .append("roomId", booking.getRoomId())
                 .append("checkedInAt", booking.getCheckedInAt())
                 .append("checkedOutAt", booking.getCheckedOutAt())
-                .append("bookingStatus", booking.getBookingStatus())
-                .append("paymentId", booking.getPaymentId());
+                .append("bookingStatus", booking.getBookingStatus() != null ? booking.getBookingStatus().name() : null)
+                .append("paymentId", booking.getPaymentId())
+                .append("fullName", booking.getFullName())
+                .append("contactInfo", booking.getContactInfo())
+                .append("roomNumber", booking.getRoomNumber())
+                .append("roomType", booking.getRoomType());
 
         this.collection.updateOne(eq("bookingId", bookingId), new Document("$set", updated));
     }
