@@ -60,8 +60,8 @@
             <VBox fx:id="bookingContent" alignment="CENTER" spacing="25" visible="true">
                 <Label style="-fx-text-fill: #374151; -fx-font-size: 18px; -fx-font-weight: bold;" text="BOOKINGS TABLE" />
 
-                <ScrollPane fitToWidth="false" fitToHeight="true" hbarPolicy="AS_NEEDED" vbarPolicy="AS_NEEDED" maxWidth="Infinity">
-                    <TableView fx:id="bookingsTable" prefHeight="500" prefWidth="1100">
+                <ScrollPane fitToHeight="true" fitToWidth="false" hbarPolicy="AS_NEEDED" maxWidth="Infinity" vbarPolicy="AS_NEEDED">
+                    <TableView fx:id="bookingsTable" prefHeight="486.0" prefWidth="1118.0">
                         <columns>
                             <TableColumn fx:id="bookingIdCol" prefWidth="100" text="Booking ID" />
                             <TableColumn fx:id="userIdCol" prefWidth="150" text="User ID" />

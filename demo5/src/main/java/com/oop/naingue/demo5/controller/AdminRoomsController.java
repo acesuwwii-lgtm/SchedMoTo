@@ -44,7 +44,7 @@ public class AdminRoomsController extends BaseController {
 
     @FXML
     private void onUserSubmit() {
-        app.switchScene("admin_user");
+        app.switchScene("admin-user");
     }
 
     @FXML

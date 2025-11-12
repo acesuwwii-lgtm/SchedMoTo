@@ -11,7 +11,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oop.naingue.demo5.controller.MainMenuController">
+<BorderPane prefHeight="800" prefWidth="1400" style="-fx-background-color: linear-gradient(to bottom right, #f8fafc, #e2e8f0);"  xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.oop.naingue.demo5.controller.MainMenuController">
 
     <top>
         <VBox spacing="0">
@@ -43,6 +44,7 @@
             <VBox alignment="CENTER" spacing="8">
                 <Button fx:id="roomsBtn" onAction="#onRoomSubmit" prefWidth="180" style="-fx-background-color: #007bff;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(0, 123, 255, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Rooms" />
                 <Button fx:id="bookingBtn" onAction="#onBookingSubmit" prefWidth="180" style="-fx-background-color: #059669;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Booking" />
+            <Button fx:id="booklistBtn" onAction="#onBookingListSubmit" prefWidth="180" style="-fx-background-color: #059669;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(5, 150, 105, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Booking List" />
                 <Button fx:id="paymentBtn" onAction="#onPaymentSubmit" prefWidth="180" style="-fx-background-color: #d97706;                                -fx-text-fill: white;                                -fx-font-size: 14px;                                -fx-font-weight: bold;                                -fx-padding: 12 25;                                -fx-background-radius: 10;                                -fx-effect: dropshadow(three-pass-box, rgba(217, 119, 6, 0.3), 8, 0, 0, 2);                                -fx-cursor: hand;" text="Payment" />
                 <Region minHeight="50" VBox.vgrow="ALWAYS" />
 

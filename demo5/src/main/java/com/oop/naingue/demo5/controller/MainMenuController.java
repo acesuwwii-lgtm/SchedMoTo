@@ -22,4 +22,9 @@ public class MainMenuController extends BaseController {
     private void onPaymentSubmit() {
         System.out.println("Switching to Button");
     }
+
+    @FXML
+    private void onBookingListSubmit() {
+        app.switchScene("user-booking-list");
+    }
 }

@@ -12,17 +12,17 @@ public abstract class BaseController  {
         this.app = app;
     }
 
-   public SchedMoToApplication getApp() {
+    public SchedMoToApplication getApp() {
         return app;
-   }
+    }
 
-   public void setCurrentUser(User currentUser) {
+    public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
-   }
+    }
 
-   public User getCurrentUser() {
+    public User getCurrentUser() {
         return currentUser;
-   }
+    }
 
     protected void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
@@ -32,5 +32,5 @@ public abstract class BaseController  {
         alert.showAndWait();
     }
 
-   public void onSceneShown() {}
+    public void onSceneShown() {}
 }

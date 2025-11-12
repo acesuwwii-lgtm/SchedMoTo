@@ -9,6 +9,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class LoginController extends BaseController {
+
     private UserRepository userRepository;
 
     @FXML
@@ -37,37 +38,26 @@ public class LoginController extends BaseController {
         }
 
         User user = userRepository.findByUserName(userName);
-
-        if (user == null) {
+        if (user == null || !PassHasher.verifyPass(password, user.getPassword())) {
             showAlert(Alert.AlertType.ERROR, "Login Error", "Invalid username or password.");
             return;
         }
 
-        boolean passwordMatch = PassHasher.verifyPass(password, user.getPassword());
-        if (!passwordMatch) {
-            showAlert(Alert.AlertType.ERROR, "Login Error", "Invalid username or password.");
-            return;
-        }
+        // store user globally
+        app.setCurrentUser(user);
 
         clearField();
-
         showAlert(Alert.AlertType.INFORMATION, "Login Success", "Login Successful.");
 
         if ("admin".equalsIgnoreCase(userName)) {
-            app.switchScene("admin-menu");
+            app.switchScene("admin-menu", user);
         } else {
-            app.switchScene("user-menu");
+            app.switchScene("user-menu", user);
         }
-
-        System.out.println("User logged in");
     }
 
     @FXML
     private void onRegisterSubmit() {
-        if (app != null) {
-            app.switchScene("register");
-        }
-        System.out.println("trying to go to register");
+        app.switchScene("register");
     }
-
 }

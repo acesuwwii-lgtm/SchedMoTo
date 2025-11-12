@@ -2,9 +2,9 @@ package com.oop.naingue.demo5;
 
 import com.oop.naingue.demo5.controller.AdminUserController;
 import com.oop.naingue.demo5.controller.BaseController;
+import com.oop.naingue.demo5.models.User;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -17,6 +17,15 @@ public class SchedMoToApplication extends Application {
 
     private Stage primaryStage;
     private final Map<String, Scene> scenes = new HashMap<>();
+    private User currentUser;
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -30,32 +39,32 @@ public class SchedMoToApplication extends Application {
         preloadScene("admin-user", "admin-user-view.fxml");
         preloadScene("admin-booking", "admin-bookings-view.fxml");
         preloadScene("admin-rooms", "admin-rooms-view.fxml");
+        preloadScene("user-booking-list", "user-booking-list-view.fxml");
         preloadScene("user-booking", "user-booking-view.fxml");
         preloadScene("payment-menu", "payment-view.fxml");
         preloadScene("receipt", "receipt-view.fxml");
 
-        // Show initial scene
+        // Show initial scene safely (no user yet)
         switchScene("login");
 
-        primaryStage.setTitle("SchedMoTo - Hotel BookingController System");
+        primaryStage.setTitle("SchedMoTo - Hotel Booking System");
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        // Attach close handler for all scenes that need cleanup
+        // Attach close handler for admin-user scene
         primaryStage.setOnCloseRequest(event -> {
-            // Get admin-user controller from preloaded scene
             Scene adminUserScene = scenes.get("admin-user");
             if (adminUserScene != null) {
                 FXMLLoader loader = (FXMLLoader) adminUserScene.getUserData();
                 Object controller = loader.getController();
                 if (controller instanceof AdminUserController auc) {
-                    auc.onClose(); // stop refresh service
+                    auc.onClose();
                 }
             }
         });
     }
 
-    private void preloadScene(String name, String fxmlFile) throws Exception {
+    private void preloadScene(String name, String fxmlFile) throws IOException {
         URL fxmlUrl = getClass().getResource("/com/oop/naingue/demo5/" + fxmlFile);
         if (fxmlUrl == null) fxmlUrl = getClass().getResource("/" + fxmlFile);
         if (fxmlUrl == null) throw new IOException("FXML not found: " + fxmlFile);
@@ -64,12 +73,6 @@ public class SchedMoToApplication extends Application {
         Scene scene = new Scene(loader.load());
         scene.setUserData(loader);
 
-//        // Load CSS if exists
-//        String cssPath = "com/oop/naingue/demo5/" + name + ".css";
-//        URL cssUrl = getClass().getResource(cssPath);
-//        if (cssUrl != null) scene.getStylesheets().add(cssUrl.toExternalForm());
-
-        // Inject app reference into controller
         Object controller = loader.getController();
         if (controller instanceof BaseController baseController) {
             baseController.setApp(this);
@@ -78,12 +81,16 @@ public class SchedMoToApplication extends Application {
         scenes.put(name, scene);
     }
 
-    public void switchScene(String name) {
+    public Object getController(String sceneName) {
+        Scene scene = scenes.get(sceneName);
+        if (scene == null) return null;
+        FXMLLoader loader = (FXMLLoader) scene.getUserData();
+        return loader.getController();
+    }
+
+    public void switchScene(String name, User loggedInUser) {
         Scene scene = scenes.get(name);
-        if (scene == null) {
-            System.err.println("Scene not found: " + name);
-            return;
-        }
+        if (scene == null) return;
 
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
@@ -92,11 +99,19 @@ public class SchedMoToApplication extends Application {
         FXMLLoader loader = (FXMLLoader) scene.getUserData();
         Object controller = loader.getController();
         if (controller instanceof BaseController baseController) {
-//            baseController.setCurrentUser(loggedInUser);
+            baseController.setCurrentUser(loggedInUser);
             baseController.onSceneShown();
         }
 
-        System.out.println("Switching to scene: " + name);
+        if (loggedInUser != null) {
+            System.out.println("Switching to scene: " + name + " for user " + loggedInUser.getUserName());
+        } else {
+            System.out.println("Switching to scene: " + name + " (no user logged in)");
+        }
+    }
+
+    public void switchScene(String name) {
+        switchScene(name, currentUser);
     }
 
     public static void main(String[] args) {

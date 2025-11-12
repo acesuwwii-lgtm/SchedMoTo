@@ -112,17 +112,17 @@ public class AdminUserController extends BaseController {
 
     @FXML
     private void onUserSubmit() {
-        System.out.println("User section active");
+        app.switchScene("admin-user");
     }
 
     @FXML
     private void onBookingSubmit() {
-        app.switchScene("booking");
+        app.switchScene("admin-booking");
     }
 
     @FXML
     private void onRoomSubmit() {
-        System.out.println("Room section active");
+       app.switchScene("admin-rooms");
     }
 
     @FXML

@@ -2,6 +2,7 @@ package com.oop.naingue.demo5.controller;
 
 import com.oop.naingue.demo5.models.Booking;
 import com.oop.naingue.demo5.repositories.BookingRepository;
+import com.oop.naingue.demo5.utils.BookingRefreshService;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,32 +16,21 @@ import java.util.List;
 
 public class AdminBookingsController extends BaseController {
 
-    @FXML
-    private TableView<Booking> bookingsTable;
-
-    @FXML
-    private TableColumn<Booking, Integer> bookingIdCol;
-    @FXML
-    private TableColumn<Booking, String> bookingStatusCol;
-    @FXML
-    private TableColumn<Booking, Integer> roomIdCol;
-    @FXML
-    private TableColumn<Booking, Integer> paymentCol;
-    @FXML
-    private TableColumn<Booking, String> userIdCol;
-    @FXML
-    private TableColumn<Booking, String> fullNameCol;
-    @FXML
-    private TableColumn<Booking, String> contactInfoCol;
-    @FXML
-    private TableColumn<Booking, String> roomTypeCol;
-    @FXML
-    private TableColumn<Booking, String> checkInCol;
-    @FXML
-    private TableColumn<Booking, String> checkOutCol;
+    @FXML private TableView<Booking> bookingsTable;
+    @FXML private TableColumn<Booking, Integer> bookingIdCol;
+    @FXML private TableColumn<Booking, String> bookingStatusCol;
+    @FXML private TableColumn<Booking, Integer> roomIdCol;
+    @FXML private TableColumn<Booking, Integer> paymentCol;
+    @FXML private TableColumn<Booking, String> userIdCol;
+    @FXML private TableColumn<Booking, String> fullNameCol;
+    @FXML private TableColumn<Booking, String> contactInfoCol;
+    @FXML private TableColumn<Booking, String> roomTypeCol;
+    @FXML private TableColumn<Booking, String> checkInCol;
+    @FXML private TableColumn<Booking, String> checkOutCol;
 
     private BookingRepository bookingRepository;
     private final ObservableList<Booking> bookingsList = FXCollections.observableArrayList();
+    private BookingRefreshService refreshService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @FXML
@@ -56,13 +46,11 @@ public class AdminBookingsController extends BaseController {
         bookingStatusCol.setCellValueFactory(c ->
                 new SimpleStringProperty(
                         c.getValue().getBookingStatus() != null
-                                ? c.getValue().getBookingStatus().name().charAt(0)
-                                + c.getValue().getBookingStatus().name().substring(1).toLowerCase()
+                                ? capitalize(c.getValue().getBookingStatus().name())
                                 : "N/A"
                 )
         );
 
-        // Additional columns (mocked or joined data depending on your model)
         fullNameCol.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().getFullName() != null ? c.getValue().getFullName() : "N/A"));
         contactInfoCol.setCellValueFactory(c -> new SimpleStringProperty(
@@ -77,23 +65,34 @@ public class AdminBookingsController extends BaseController {
 
         bookingsTable.setItems(bookingsList);
 
+        // Load immediately
         loadBookings();
+
+        // Start periodic refresh (every 1 minute, can adjust)
+        refreshService = new BookingRefreshService(bookingRepository, bookingsList);
+        refreshService.start(0, 1); // initial delay 0 minutes, period 1 minute
     }
 
     private void loadBookings() {
-        bookingsList.clear();
         List<Booking> allBookings = bookingRepository.findAll();
-        bookingsList.addAll(allBookings);
+        bookingsList.setAll(allBookings);
+    }
+
+    private String capitalize(String text) {
+        if (text == null || text.isEmpty()) return "";
+        return text.substring(0,1).toUpperCase() + text.substring(1).toLowerCase();
     }
 
     @FXML
     private void onLogoutSubmit() {
+        stopRefresh();
         app.switchScene("login");
     }
 
     @FXML
     private void onUserSubmit() {
-        app.switchScene("admin_user");
+        stopRefresh();
+        app.switchScene("admin-user");
     }
 
     @FXML
@@ -103,11 +102,19 @@ public class AdminBookingsController extends BaseController {
 
     @FXML
     private void onRoomSubmit() {
-        app.switchScene("admin_room");
+        stopRefresh();
+        app.switchScene("admin-rooms");
     }
 
     @FXML
     private void onPaymentSubmit() {
+        stopRefresh();
         app.switchScene("admin_payment");
+    }
+
+    private void stopRefresh() {
+        if (refreshService != null) {
+            refreshService.stop();
+        }
     }
 }
