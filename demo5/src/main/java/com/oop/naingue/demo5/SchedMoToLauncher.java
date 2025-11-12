@@ -1,6 +1,5 @@
 package com.oop.naingue.demo5;
 
-import com.oop.naingue.demo5.application.SchedMoToApplication;
 import javafx.application.Application;
 
 public class SchedMoToLauncher {
