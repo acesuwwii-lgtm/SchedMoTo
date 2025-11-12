@@ -3,12 +3,10 @@ package com.oop.naingue.demo5.controller;
 import com.oop.naingue.demo5.models.Booking;
 import com.oop.naingue.demo5.models.Rooms;
 import com.oop.naingue.demo5.repositories.BookingRepository;
+import com.oop.naingue.demo5.repositories.RoomsRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import net.synedra.validatorfx.Validator;
-
-import java.util.List;
 
 public class UserBookingsController extends BaseController {
 
@@ -21,6 +19,7 @@ public class UserBookingsController extends BaseController {
     @FXML private DatePicker dpCheckOut;
 
     private final BookingRepository bookingRepository = new BookingRepository();
+    private final RoomsRepository roomsRepository = new RoomsRepository(); // instance added
 
     @FXML
     private void onCancel() {
@@ -37,9 +36,7 @@ public class UserBookingsController extends BaseController {
         if (currentUser != null) {
             txtContactInfo.setText(currentUser.getPhone()); // or currentUser.getEmail()
         }
-
     }
-
 
     @FXML
     private void onSaveBooking() {
@@ -69,6 +66,18 @@ public class UserBookingsController extends BaseController {
             return;
         }
 
+        // Check room status
+        Rooms room = roomsRepository.findByRoomId(Integer.parseInt(txtRoomId.getText()));
+        if (room != null) {
+            String status = room.getStatus().trim().toLowerCase();
+            if (status.equals("booked") || status.equals("under-maintenance")) {
+                showAlert(javafx.scene.control.Alert.AlertType.WARNING, "Unavailable",
+                        "This room cannot be booked because it is " + room.getStatus());
+                return;
+            }
+        }
+
+
         // Create booking
         Booking booking = new Booking();
         booking.setUserId(currentUser.getId());
@@ -85,8 +94,5 @@ public class UserBookingsController extends BaseController {
 
         showAlert(javafx.scene.control.Alert.AlertType.INFORMATION, "Success", "Booking saved successfully.");
         app.switchScene("user-booking-list", currentUser);
-
-
     }
-
 }

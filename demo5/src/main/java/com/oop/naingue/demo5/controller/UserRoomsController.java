@@ -46,13 +46,24 @@ public class UserRoomsController extends BaseController {
         Button bookBtn = new Button("Book");
         bookBtn.setStyle("-fx-background-color: #059669; -fx-text-fill: white; -fx-font-weight: bold;" +
                 " -fx-padding: 6 12; -fx-background-radius: 8; -fx-cursor: hand;");
-        bookBtn.setOnAction(event -> openBooking(room));
+
+        // Disable button if room is Booked or Under-Maintenance
+        String roomStatus = room.getStatus().trim().toLowerCase();
+        if (roomStatus.equals("booked") || roomStatus.equals("under-maintenance")) {
+            bookBtn.setDisable(true);
+            bookBtn.setText("Unavailable");
+            bookBtn.setStyle("-fx-background-color: #d1d5db; -fx-text-fill: #6b7280; -fx-font-weight: bold;" +
+                    " -fx-padding: 6 12; -fx-background-radius: 8; -fx-cursor: default;");
+        } else {
+            bookBtn.setOnAction(event -> openBooking(room));
+        }
 
         details.getChildren().addAll(roomNumber, roomType, roomPrice, roomCapacity, status, bookBtn);
 
         card.getChildren().add(details);
         return card;
     }
+
 
     private void openBooking(Rooms room) {
         // Switch to booking scene
