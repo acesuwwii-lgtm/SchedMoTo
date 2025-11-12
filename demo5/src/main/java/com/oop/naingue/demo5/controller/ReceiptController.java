@@ -1,53 +1,56 @@
 package com.oop.naingue.demo5.controller;
 
+import com.oop.naingue.demo5.models.Booking;
+import com.oop.naingue.demo5.models.Rooms;
+import com.oop.naingue.demo5.repositories.BookingRepository;
+import com.oop.naingue.demo5.repositories.RoomsRepository;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 
 import java.time.LocalDate;
 
 public class ReceiptController extends BaseController {
 
-    private String bookingId;
-    private String amount;
-    private LocalDate paymentDate;
-    private String method;
-    private String status;
+    @FXML private Label lblReceipt;
 
-    @FXML
-    private AnchorPane root;
+    private final BookingRepository bookingRepository = new BookingRepository();
+    private final RoomsRepository roomsRepository = new RoomsRepository();
 
-    @FXML
-    private Label lblReceipt;
+    private int bookingId;
 
-    public void setPaymentDetails(String bookingId, String amount, LocalDate paymentDate, String method, String status) {
+    // Called by PaymentController when switching scene
+    public void setBookingId(int bookingId) {
         this.bookingId = bookingId;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.method = method;
-        this.status = status;
-
         printReceipt();
     }
 
     private void printReceipt() {
-        System.out.println("----- RECEIPT -----");
-        System.out.println("Booking ID: " + bookingId);
-        System.out.println("Amount: " + amount);
-        System.out.println("Date: " + paymentDate);
-        System.out.println("Method: " + method);
-        System.out.println("Status: " + status);
-        System.out.println("-------------------");
+        Booking booking = bookingRepository.findByBookingId(bookingId);
+        if (booking == null) return;
 
-        // Optionally, show in UI label
+        Rooms room = roomsRepository.findByRoomId(booking.getRoomId());
+
+        StringBuilder receiptText = new StringBuilder();
+        receiptText.append("----- RECEIPT -----\n")
+                .append("Booking ID: ").append(booking.getBookingId()).append("\n")
+                .append("Guest Name: ").append(booking.getFullName()).append("\n")
+                .append("Room Number: ").append(booking.getRoomNumber()).append("\n")
+                .append("Room Type: ").append(booking.getRoomType()).append("\n")
+                .append("Check-In: ").append(booking.getCheckedInAt()).append("\n")
+                .append("Check-Out: ").append(booking.getCheckedOutAt()).append("\n");
+
+        if (room != null) {
+            receiptText.append("Amount Paid: ").append(room.getRoomPrice()).append("\n");
+        }
+
+        receiptText.append("Payment Date: ").append(LocalDate.now()).append("\n")
+                .append("Payment Status: ").append(booking.getBookingStatus()).append("\n")
+                .append("-------------------");
+
+        System.out.println(receiptText);
+
         if (lblReceipt != null) {
-            lblReceipt.setText(
-                    "Booking ID: " + bookingId + "\n" +
-                            "Amount: " + amount + "\n" +
-                            "Date: " + paymentDate + "\n" +
-                            "Method: " + method + "\n" +
-                            "Status: " + status
-            );
+            lblReceipt.setText(receiptText.toString());
         }
     }
 }
